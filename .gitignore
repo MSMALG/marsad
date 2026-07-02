@@ -1,0 +1,19 @@
+# Node
+node_modules/
+dist/
+.vite/
+
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
