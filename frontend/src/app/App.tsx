@@ -1,6 +1,52 @@
-import { Bell, User, Eye, Target, Flame, AlertTriangle, Shield, Diamond, Plane, Home, TrendingUp, Grid3x3, PieChart, PlusCircle, Plus } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { api } from "../api/client";
+
+import {
+  Bell,
+  User,
+  Eye,
+  Target,
+  Flame,
+  AlertTriangle,
+  Shield,
+  Diamond,
+  Plane,
+  Home,
+  TrendingUp,
+  Grid3x3,
+  PieChart,
+  PlusCircle,
+  Plus,
+} from "lucide-react";
+
+type DashboardData = {
+  user: string;
+  balance: number;
+  income: number;
+  expenses: number;
+  savings: number;
+  risk: string;
+  recommendation: string;
+};
 
 export default function App() {
+  const [dashboard, setDashboard] = useState<DashboardData | null>(null);
+
+  useEffect(() => {
+    api
+      .get("/dashboard")
+      .then((res) => setDashboard(res.data))
+      .catch(console.error);
+  }, []);
+
+  if (!dashboard) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div className="size-full flex items-center justify-center bg-gray-100" dir="rtl">
       {/* iPhone 14 Frame */}
@@ -17,7 +63,7 @@ export default function App() {
                   className="font-bold"
                   style={{ fontFamily: 'Tajawal, sans-serif', color: '#333333', fontSize: 17, lineHeight: '22px', marginBottom: 2 }}
                 >
-                  أهلاً جنى
+                 أهلاً {dashboard.user}
                 </h1>
                 <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 11, lineHeight: '15px' }}>
                   يرصد فلوسك ويصون مستقبلك
@@ -56,7 +102,7 @@ export default function App() {
                 className="font-bold"
                 style={{ fontFamily: 'Tajawal, sans-serif', color: '#FFFFFF', fontSize: 28, lineHeight: '36px', marginBottom: 10 }}
               >
-                24,650 ر.س
+                {dashboard.balance.toLocaleString()} ر.س
               </div>
               <div className="flex" style={{ gap: 8 }}>
                 <div className="flex-1 bg-[#F2EDE2]" style={{ borderRadius: 10, padding: 8 }}>
@@ -64,7 +110,7 @@ export default function App() {
                     وفرتِ هذا الشهر
                   </p>
                   <p className="font-bold" style={{ fontFamily: 'Tajawal, sans-serif', color: '#2F3E34', fontSize: 13, lineHeight: '17px' }}>
-                    1,280 ر.س
+                    {dashboard.savings.toLocaleString()} ر.س
                   </p>
                 </div>
                 <div className="flex-1 bg-[#F2EDE2]" style={{ borderRadius: 10, padding: 8 }}>
@@ -119,7 +165,7 @@ export default function App() {
                     تنبيه الميزانية
                   </h4>
                   <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>
-                    صرفتِ 420 ر.س على القهوة
+                   {dashboard.recommendation}
                   </p>
                 </div>
               </div>
