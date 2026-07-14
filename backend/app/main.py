@@ -19,7 +19,7 @@ app.add_middleware(
 
 @app.get("/")
 def root():
-    return {"message": "Marsad Backend Running 🚀"}
+    return {"message": "Marsad Backend Running "}
 
 @app.get("/dashboard")
 def dashboard():

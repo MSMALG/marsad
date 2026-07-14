@@ -14,8 +14,8 @@ const T = {
   segBg:     "#EDEAE1",
 };
 
-const tajawal = "Tajawal, sans-serif";
-const cairo   = "Cairo, sans-serif";
+const tajawal = "tarif-arabic, sans-serif";
+const cairo   = "readex-pro-vf, sans-serif";
 
 const DONUT = [
   { label: "السكن",     pct: 32, color: "#365C4B" },

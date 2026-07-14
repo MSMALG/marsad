@@ -38,7 +38,7 @@ export default function BottomNav({
             />
             <span
               style={{
-                fontFamily: "'Cairo', sans-serif",
+                fontFamily: "'readex-pro-vf', sans-serif",
                 color: isActive ? "#2F3E34" : "#999999",
                 fontSize: 10,
                 fontWeight: isActive ? 600 : 400,

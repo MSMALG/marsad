@@ -19,7 +19,7 @@ export default function PhoneShell({ children }: { children: ReactNode }) {
           style={{ height: 59, paddingBottom: 11 }}
         >
           <span
-            style={{ fontFamily: "'Cairo', sans-serif" }}
+            style={{ fontFamily: "'readex-pro-vf', sans-serif" }}
             className="text-[15px] font-bold text-[#2E352F]"
           >
             9:41

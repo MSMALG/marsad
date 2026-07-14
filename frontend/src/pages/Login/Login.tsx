@@ -36,7 +36,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
       <style>{`
         .mirsad-input::placeholder {
           color: #9A9690;
-          font-family: 'Cairo', sans-serif;
+          font-family: 'readex-pro-vf', sans-serif;
           font-size: 13.5px;
         }
         .mirsad-input:focus { outline: none; }
@@ -91,7 +91,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
           position: "relative",
         }}>
           <h1 style={{
-            fontFamily: "'Cairo', sans-serif",
+            fontFamily: "'readex-pro-vf', sans-serif",
             fontSize: "30px", fontWeight: "700",
             color: "#37463A",
             textAlign: "center",
@@ -104,7 +104,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
           </h1>
 
           <p style={{
-            fontFamily: "'Cairo', sans-serif",
+            fontFamily: "'readex-pro-vf', sans-serif",
             fontSize: "13.5px", fontWeight: "400",
             color: "#7D8078",
             textAlign: "center",
@@ -161,7 +161,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                   flex: 1, minWidth: 0,
                   background: "transparent",
                   border: "none", outline: "none",
-                  fontFamily: "'Cairo', sans-serif",
+                  fontFamily: "'readex-pro-vf', sans-serif",
                   fontSize: "14px", fontWeight: "400",
                   color: "#2E352F",
                   direction: "rtl", textAlign: "right",
@@ -202,7 +202,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                   flex: 1, minWidth: 0,
                   background: "transparent",
                   border: "none", outline: "none",
-                  fontFamily: "'Cairo', sans-serif",
+                  fontFamily: "'readex-pro-vf', sans-serif",
                   fontSize: "14px", fontWeight: "400",
                   color: "#2E352F",
                   direction: "rtl", textAlign: "right",
@@ -247,7 +247,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                 )}
               </div>
               <span style={{
-                fontFamily: "'Cairo', sans-serif",
+                fontFamily: "'readex-pro-vf', sans-serif",
                 fontSize: "13px", fontWeight: "500", color: "#2E352F",
                 direction: "rtl",
               }}>
@@ -257,7 +257,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
 
             <button style={{
               background: "none", border: "none", cursor: "pointer",
-              fontFamily: "'Cairo', sans-serif",
+              fontFamily: "'readex-pro-vf', sans-serif",
               fontSize: "13px", fontWeight: "600",
               color: "#4A5E4D",
               direction: "rtl", padding: 0,
@@ -273,7 +273,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
               width: "100%", height: "56px",
               background: "linear-gradient(135deg, #4A5E4D 0%, #37463A 100%)",
               borderRadius: "18px", border: "none", cursor: "pointer",
-              fontFamily: "'Cairo', sans-serif",
+              fontFamily: "'readex-pro-vf', sans-serif",
               fontSize: "16px", fontWeight: "700", color: "white",
               letterSpacing: "0.2px",
               boxShadow: "0 10px 28px rgba(55,70,58,0.38), 0 3px 8px rgba(55,70,58,0.22)",
