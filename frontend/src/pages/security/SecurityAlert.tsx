@@ -1,3 +1,6 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 import { C, F } from "./constants";
 import {
   AlertTriangle,
@@ -6,7 +9,21 @@ import {
 } from "lucide-react";
 
 export default function SecurityAlert({ onNavigate }: { onNavigate: () => void }) {
-  const reasons = ["تحويل في وقت غير معتاد", "جهاز جديد غير معروف", "مبلغ أعلى من نمط الإنفاق"];
+
+  const [transaction, setTransaction] = useState<any>(null);
+
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/last-transaction")
+      .then((res) => setTransaction(res.data))
+      .catch(console.error);
+  }, []);
+
+  const reasons = [
+    "تحويل في وقت غير معتاد",
+    "جهاز جديد غير معروف",
+    "مبلغ أعلى من نمط الإنفاق",
+  ];
 
   return (
     <div
@@ -56,21 +73,72 @@ export default function SecurityAlert({ onNavigate }: { onNavigate: () => void }
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 16px", marginBottom: 14 }}>
-            {[
-              { label: "المبلغ", value: "5,000 ر.س", highlight: true },
-              { label: "التاريخ", value: "08 يوليو 2026" },
-              { label: "الوقت", value: "03:00 ص" },
-              { label: "الموقع", value: "الرياض" },
-              { label: "الجهاز", value: "جهاز غير معروف" },
-              { label: "النوع", value: "تحويل خارجي" },
-            ].map((item) => (
-              <div key={item.label}>
-                <div style={{ fontSize: 10, color: C.muted, fontFamily: F, fontWeight: 500, marginBottom: 2 }}>{item.label}</div>
-                <div style={{ fontSize: 13, color: item.highlight ? C.danger : C.text, fontFamily: F, fontWeight: item.highlight ? 700 : 600 }}>{item.value}</div>
-              </div>
-            ))}
-          </div>
+          <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "10px 16px",
+    marginBottom: 14,
+  }}
+>
+  {[
+    {
+      label: "المبلغ",
+    value: `${transaction?.amount ?? "-"} ر.س`,
+      highlight: true,
+    },
+    {
+      label: "التاريخ",
+      value: transaction?.date ?? "-",
+      highlight: false,
+    },
+    {
+      label: "الوقت",
+      value: transaction?.time ?? "-",
+      highlight: false,
+    },
+    {
+      label: "الموقع",
+      value: transaction?.location ?? "-",
+      highlight: false,
+    },
+    {
+      label: "الجهاز",
+      value: transaction?.device ?? "-",
+      highlight: false,
+    },
+    {
+      label: "النوع",
+      value: transaction?.type ?? "-",
+      highlight: false,
+    },
+  ].map((item) => (
+    <div key={item.label}>
+      <div
+        style={{
+          fontSize: 10,
+          color: C.muted,
+          fontFamily: F,
+          fontWeight: 500,
+          marginBottom: 2,
+        }}
+      >
+        {item.label}
+      </div>
+
+      <div
+        style={{
+          fontSize: 13,
+          color: item.highlight ? C.danger : C.text,
+          fontFamily: F,
+          fontWeight: item.highlight ? 700 : 600,
+        }}
+      >
+        {item.value}
+      </div>
+    </div>
+  ))}
+</div>
 
           <div style={{ height: 1, background: C.border, marginBottom: 12 }} />
 
@@ -99,13 +167,40 @@ export default function SecurityAlert({ onNavigate }: { onNavigate: () => void }
         }}>
           أنا من قام بهذه العملية
         </button>
-        <button style={{
-          width: "100%", height: 50, borderRadius: 16, background: "transparent",
-          border: `1.5px solid ${C.danger}`, cursor: "pointer", fontSize: 14,
-          fontWeight: 600, color: C.danger, fontFamily: F,
-        }}>
-          الإبلاغ عن عملية مشبوهة
-        </button>
+       <button
+  onClick={async () => {
+    try {
+      await axios.post("http://127.0.0.1:8000/analyze-transaction", {
+  user_id: 1,
+  amount: 5000,
+  date: "08 يوليو 2026",
+  time: "03:00 ص",
+  location: "الرياض",
+  device: "جهاز غير معروف",
+  type: "تحويل خارجي"
+});
+
+      alert("تم تسجيل العملية في البلوك تشين");
+    } catch (e) {
+      alert("حدث خطأ أثناء الإرسال");
+      console.error(e);
+    }
+  }}
+  style={{
+    width: "100%",
+    height: 50,
+    borderRadius: 16,
+    background: "transparent",
+    border: '1.5px solid ${C.danger}',
+    cursor: "pointer",
+    fontSize: 14,
+    fontWeight: 600,
+    color: C.danger,
+    fontFamily: F,
+  }}
+>
+  الإبلاغ عن عملية مشبوهة
+</button>
         <button
           onClick={onNavigate}
           style={{

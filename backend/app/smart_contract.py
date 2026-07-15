@@ -1,12 +1,13 @@
 from blockchain import add_block
 
-def record_suspicious(model_result, details):
-    if model_result == -1:
+def record_suspicious(is_suspicious, details):
+    if is_suspicious:
         proof = add_block({
-            'amount': details.get('amount'),
-            'time': details.get('time'),
-            'device': details.get('device'),
-            'reason': 'Detected by Isolation Forest'
+            "amount": details.get("amount"),
+            "time": details.get("time"),
+            "device": details.get("device"),
+            "reason": "Detected by Business Rules"
         })
-        return True, proof['hash']
+        return True, proof["hash"]
+
     return False, None

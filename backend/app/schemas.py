@@ -116,4 +116,4 @@ class BehaviorAnalysisResponse(BaseModel):
     category_breakdown: List[CategoryBreakdownItem]
     behavior_classification: BehaviorClassification
     anomaly_flags: List[AnomalyFlag]
- 
+    blockchain_hash: str | None = None
