@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from wallets import router as wallet_router
 from Budget import router as budget_router
 from Alert import router as alerts_router
+from BehaviorAnalysis import router as behavior_router
 
 app = FastAPI(
     title="Marsad API",
@@ -36,3 +37,4 @@ def dashboard():
 app.include_router(wallet_router)
 app.include_router(budget_router)
 app.include_router(alerts_router)
+app.include_router(behavior_router)

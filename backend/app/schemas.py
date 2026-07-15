@@ -5,7 +5,8 @@ and for shaping the JSON response.
 """
 
 from pydantic import BaseModel, Field
-
+from typing import List
+from pydantic import BaseModel
 
 class PredictionRequest(BaseModel):
     Age: int = Field(..., ge=18, le=100, example=30)
@@ -53,3 +54,66 @@ class PredictionRequest(BaseModel):
 
 class PredictionResponse(BaseModel):
     predicted_monthly_expenses: float
+
+ 
+ 
+class BehaviorAnalysisRequest(BaseModel):
+    Age: int
+    Monthly_Income: float
+    Monthly_Salary: float
+    Household_Size: int
+    CPI: float
+    Gender: str
+    Region: str
+    Nationality: str
+    Marital_Status: str
+    Education: str
+    Employment_Status: str
+    Occupation: str
+    Housing_Type: str
+    Housing_Ownership: str
+    Investment_Profile: str
+    Risk_Level: str
+    Goal_Type: str
+ 
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "Age": 30, "Monthly_Income": 12000, "Monthly_Salary": 10000,
+                "Household_Size": 4, "CPI": 1.02, "Gender": "Male", "Region": "Riyadh",
+                "Nationality": "Saudi", "Marital_Status": "Married", "Education": "Bachelor",
+                "Employment_Status": "Employed", "Occupation": "Engineer",
+                "Housing_Type": "Apartment", "Housing_Ownership": "Owned",
+                "Investment_Profile": "Moderate", "Risk_Level": "Medium",
+                "Goal_Type": "Emergency Fund"
+            }
+        }
+ 
+ 
+class CategoryBreakdownItem(BaseModel):
+    category: str
+    category_key: str
+    amount: float
+    share: float
+ 
+ 
+class BehaviorClassification(BaseModel):
+    label: str
+    description: str
+    savings_rate: float
+    monthly_savings: float
+ 
+ 
+class AnomalyFlag(BaseModel):
+    type: str
+    severity: str
+    message: str
+ 
+ 
+class BehaviorAnalysisResponse(BaseModel):
+    predicted_monthly_expenses: float
+    monthly_income: float
+    category_breakdown: List[CategoryBreakdownItem]
+    behavior_classification: BehaviorClassification
+    anomaly_flags: List[AnomalyFlag]
+ 

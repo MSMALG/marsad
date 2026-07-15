@@ -1,29 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-
-function MirsadIcon() {
-  return (
-    <svg width="50" height="50" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="26" cy="26" r="23" stroke="rgba(255,255,255,0.32)" strokeWidth="1.2" strokeDasharray="2.5 3.5" />
-      <circle cx="26" cy="26" r="15.5" stroke="rgba(255,255,255,0.18)" strokeWidth="1" />
-      <path
-        d="M5 26C10 16.5 42 16.5 47 26C42 35.5 10 35.5 5 26Z"
-        stroke="white"
-        strokeWidth="1.8"
-        fill="none"
-        strokeLinejoin="round"
-        strokeLinecap="round"
-      />
-      <circle cx="26" cy="26" r="6" stroke="white" strokeWidth="1.6" fill="none" />
-      <circle cx="26" cy="26" r="3.5" stroke="rgba(255,255,255,0.45)" strokeWidth="0.8" fill="none" />
-      <circle cx="26" cy="26" r="2" fill="white" />
-      <path d="M3 13 L3 3 L13 3" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M49 13 L49 3 L39 3" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M3 39 L3 49 L13 49" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M49 39 L49 49 L39 49" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
+import logo from "../../assets/logo.png";
 
 export default function Login({ onLogin }: { onLogin: () => void }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,7 +13,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
       <style>{`
         .mirsad-input::placeholder {
           color: #9A9690;
-          font-family: 'readex-pro-vf', sans-serif;
+          font-family: 'SF Arabic', sans-serif;
           font-size: 13.5px;
         }
         .mirsad-input:focus { outline: none; }
@@ -67,17 +44,17 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
           overflowY: "auto",
         }}
       >
-        {/* Floating badge icon */}
+        {/* Floating logo, same footprint as the old circle badge, no background */}
         <div style={{ position: "relative", zIndex: 10, marginBottom: "-48px" }}>
-          <div style={{
-            width: "96px", height: "96px",
-            borderRadius: "50%",
-            background: "linear-gradient(145deg, #4A5E4D 0%, #37463A 100%)",
-            boxShadow: "0 18px 52px rgba(55,70,58,0.54), 0 7px 18px rgba(55,70,58,0.36), 0 0 0 4px rgba(252,251,248,0.92), 0 0 0 5px rgba(229,223,212,0.4)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <MirsadIcon />
-          </div>
+          <img
+            src={logo}
+            alt="مرصاد"
+            style={{
+              width: "96px",
+              height: "96px",
+              objectFit: "contain",
+            }}
+          />
         </div>
 
         {/* Card */}
@@ -91,7 +68,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
           position: "relative",
         }}>
           <h1 style={{
-            fontFamily: "'readex-pro-vf', sans-serif",
+            fontFamily: "'SF Arabic', sans-serif",
             fontSize: "30px", fontWeight: "700",
             color: "#37463A",
             textAlign: "center",
@@ -104,16 +81,14 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
           </h1>
 
           <p style={{
-            fontFamily: "'readex-pro-vf', sans-serif",
+            fontFamily: "'SF Arabic', sans-serif",
             fontSize: "13.5px", fontWeight: "400",
             color: "#7D8078",
             textAlign: "center",
             lineHeight: "1.8",
             margin: "0 0 16px",
             direction: "rtl",
-          }}>
-            نرصد لأجلك...<br />
-            لنحمي مستقبلك المالي
+          }}>  نرصد فلوسك، لنحمي مستقبلك
           </p>
 
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
@@ -161,7 +136,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                   flex: 1, minWidth: 0,
                   background: "transparent",
                   border: "none", outline: "none",
-                  fontFamily: "'readex-pro-vf', sans-serif",
+                  fontFamily: "'SF Arabic', sans-serif",
                   fontSize: "14px", fontWeight: "400",
                   color: "#2E352F",
                   direction: "rtl", textAlign: "right",
@@ -202,7 +177,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                   flex: 1, minWidth: 0,
                   background: "transparent",
                   border: "none", outline: "none",
-                  fontFamily: "'readex-pro-vf', sans-serif",
+                  fontFamily: "'SF Arabic', sans-serif",
                   fontSize: "14px", fontWeight: "400",
                   color: "#2E352F",
                   direction: "rtl", textAlign: "right",
@@ -247,7 +222,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                 )}
               </div>
               <span style={{
-                fontFamily: "'readex-pro-vf', sans-serif",
+                fontFamily: "'SF Arabic', sans-serif",
                 fontSize: "13px", fontWeight: "500", color: "#2E352F",
                 direction: "rtl",
               }}>
@@ -257,7 +232,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
 
             <button style={{
               background: "none", border: "none", cursor: "pointer",
-              fontFamily: "'readex-pro-vf', sans-serif",
+              fontFamily: "'SF Arabic', sans-serif",
               fontSize: "13px", fontWeight: "600",
               color: "#4A5E4D",
               direction: "rtl", padding: 0,
@@ -273,7 +248,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
               width: "100%", height: "56px",
               background: "linear-gradient(135deg, #4A5E4D 0%, #37463A 100%)",
               borderRadius: "18px", border: "none", cursor: "pointer",
-              fontFamily: "'readex-pro-vf', sans-serif",
+              fontFamily: "'SF Arabic', sans-serif",
               fontSize: "16px", fontWeight: "700", color: "white",
               letterSpacing: "0.2px",
               boxShadow: "0 10px 28px rgba(55,70,58,0.38), 0 3px 8px rgba(55,70,58,0.22)",
