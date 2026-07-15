@@ -1,0 +1,1639 @@
+{
+  "metadata": {
+    "project": "Mersad AI",
+    "description": "Statistical distributions and business rules derived from official Saudi government datasets, used to generate a realistic synthetic personal-finance dataset (100k-300k rows) for ML model training.",
+    "sources": [
+      "Saudi Open Data Platform",
+      "General Authority for Statistics (GASTAT)"
+    ]
+  },
+  "population": {
+    "source": "GASTAT Population Dataset",
+    "total_population": 32795091,
+    "nationality_split": {
+      "saudi_share": 0.5339,
+      "nonsaudi_share": 0.4661
+    },
+    "age_group_distribution": {
+      "5-9": {
+        "saudi_male": 1153454.0,
+        "saudi_female": 1127344.0,
+        "nonsaudi_male": 256343.0,
+        "nonsaudi_female": 243711.0,
+        "share_of_population": 0.084795
+      },
+      "10-14": {
+        "saudi_male": 1103253.0,
+        "saudi_female": 1075034.0,
+        "nonsaudi_male": 237412.0,
+        "nonsaudi_female": 225184.0,
+        "share_of_population": 0.080527
+      },
+      "15-19": {
+        "saudi_male": 992884.0,
+        "saudi_female": 975955.0,
+        "nonsaudi_male": 189492.0,
+        "nonsaudi_female": 177801.0,
+        "share_of_population": 0.071234
+      },
+      "20-24": {
+        "saudi_male": 884417.0,
+        "saudi_female": 872503.0,
+        "nonsaudi_male": 1031907.0,
+        "nonsaudi_female": 259526.0,
+        "share_of_population": 0.092952
+      },
+      "25-29": {
+        "saudi_male": 862252.0,
+        "saudi_female": 853022.0,
+        "nonsaudi_male": 1972204.0,
+        "nonsaudi_female": 501014.0,
+        "share_of_population": 0.127717
+      },
+      "30-34": {
+        "saudi_male": 807752.0,
+        "saudi_female": 801655.0,
+        "nonsaudi_male": 2039534.0,
+        "nonsaudi_female": 532304.0,
+        "share_of_population": 0.127496
+      },
+      "35-39": {
+        "saudi_male": 722806.0,
+        "saudi_female": 720219.0,
+        "nonsaudi_male": 2072825.0,
+        "nonsaudi_female": 532013.0,
+        "share_of_population": 0.123429
+      },
+      "40-44": {
+        "saudi_male": 599165.0,
+        "saudi_female": 604477.0,
+        "nonsaudi_male": 1574139.0,
+        "nonsaudi_female": 364198.0,
+        "share_of_population": 0.095806
+      },
+      "45-49": {
+        "saudi_male": 436840.0,
+        "saudi_female": 452556.0,
+        "nonsaudi_male": 1017713.0,
+        "nonsaudi_female": 220582.0,
+        "share_of_population": 0.064878
+      },
+      "50-54": {
+        "saudi_male": 337761.0,
+        "saudi_female": 365968.0,
+        "nonsaudi_male": 661253.0,
+        "nonsaudi_female": 135064.0,
+        "share_of_population": 0.04574
+      },
+      "55-59": {
+        "saudi_male": 278222.0,
+        "saudi_female": 302239.0,
+        "nonsaudi_male": 439307.0,
+        "nonsaudi_female": 82095.0,
+        "share_of_population": 0.033598
+      },
+      "60-64": {
+        "saudi_male": 207603.0,
+        "saudi_female": 226875.0,
+        "nonsaudi_male": 225846.0,
+        "nonsaudi_female": 52863.0,
+        "share_of_population": 0.021747
+      },
+      "65-69": {
+        "saudi_male": 148001.0,
+        "saudi_female": 154971.0,
+        "nonsaudi_male": 103667.0,
+        "nonsaudi_female": 30471.0,
+        "share_of_population": 0.013329
+      },
+      "70-74": {
+        "saudi_male": 86556.0,
+        "saudi_female": 93691.0,
+        "nonsaudi_male": 42212.0,
+        "nonsaudi_female": 17157.0,
+        "share_of_population": 0.007306
+      },
+      "75-79": {
+        "saudi_male": 56837.0,
+        "saudi_female": 59167.0,
+        "nonsaudi_male": 16766.0,
+        "nonsaudi_female": 8999.0,
+        "share_of_population": 0.004323
+      },
+      "80+": {
+        "saudi_male": 70027.0,
+        "saudi_female": 75214.0,
+        "nonsaudi_male": 13557.0,
+        "nonsaudi_female": 9212.0,
+        "share_of_population": 0.005123
+      }
+    }
+  },
+  "wages": {
+    "source": "GASTAT Wages of Employees by Gender and Nationality",
+    "latest_quarter": "2023 / Q2",
+    "average_monthly_wage_sar": {
+      "Saudi": 9923.6,
+      "Male": 4886.04,
+      "Female": 3027.62,
+      "Non Saudi": 4661.57
+    }
+  },
+  "consumer_price_index": {
+    "source": "GASTAT Consumer Price Index",
+    "latest_month": "2026-01",
+    "national_general_index": 104.4669,
+    "regional_cost_of_living": {
+      "المملكة": {
+        "general_index": 104.4669,
+        "cost_of_living_factor": 1.0
+      },
+      "الرياض": {
+        "general_index": 107.0019,
+        "cost_of_living_factor": 1.0243
+      },
+      "مكة المكرمة": {
+        "general_index": 102.1536,
+        "cost_of_living_factor": 0.9779
+      },
+      "المدينة المنورة": {
+        "general_index": 106.1955,
+        "cost_of_living_factor": 1.0165
+      },
+      "القصيم": {
+        "general_index": 109.0773,
+        "cost_of_living_factor": 1.0441
+      },
+      "المنطقة الشرقية": {
+        "general_index": 102.7219,
+        "cost_of_living_factor": 0.9833
+      },
+      "عسير": {
+        "general_index": 101.3579,
+        "cost_of_living_factor": 0.9702
+      },
+      "تبوك": {
+        "general_index": 101.0043,
+        "cost_of_living_factor": 0.9669
+      },
+      "حائل": {
+        "general_index": 104.2856,
+        "cost_of_living_factor": 0.9983
+      },
+      "الحدود الشمالية": {
+        "general_index": 103.4531,
+        "cost_of_living_factor": 0.9903
+      },
+      "جازان": {
+        "general_index": 103.3317,
+        "cost_of_living_factor": 0.9891
+      },
+      "نجران": {
+        "general_index": 106.9064,
+        "cost_of_living_factor": 1.0234
+      },
+      "الباحة": {
+        "general_index": 102.729,
+        "cost_of_living_factor": 0.9834
+      },
+      "الجوف": {
+        "general_index": 102.8537,
+        "cost_of_living_factor": 0.9846
+      }
+    },
+    "category_index_national": {
+      "FOOD AND BEVERAGES": 101.6463,
+      "TOBACCO": 99.7493,
+      "CLOTHING AND FOOTWEAR": 96.7287,
+      "HEALTH": 99.8224,
+      "TRANSPORT": 101.1856,
+      "INFORMATION AND COMMUNICATION": 97.7812,
+      "EDUCATION SERVICES": 102.44,
+      "RESTAURANTS AND ACCOMMODATION SERVICES": 107.0261,
+      "INSURANCE AND FINANCIAL SERVICES": 105.346
+    },
+    "region_name_bridge_ar_to_en": {
+      "المملكة": "Kingdom (National)",
+      "الرياض": "Riyadh",
+      "مكة المكرمة": "Makkah",
+      "المدينة المنورة": "Madinah",
+      "القصيم": "Qassim",
+      "المنطقة الشرقية": "Eastern Province",
+      "عسير": "Asir",
+      "تبوك": "Tabuk",
+      "حائل": "Hail",
+      "الحدود الشمالية": "Northern Border",
+      "جازان": "Jazan",
+      "نجران": "Najran",
+      "الباحة": "AL - Baha",
+      "الجوف": "AL - Jouf"
+    },
+    "regional_cost_of_living_en": {
+      "Kingdom (National)": {
+        "general_index": 104.4669,
+        "cost_of_living_factor": 1.0
+      },
+      "Riyadh": {
+        "general_index": 107.0019,
+        "cost_of_living_factor": 1.0243
+      },
+      "Makkah": {
+        "general_index": 102.1536,
+        "cost_of_living_factor": 0.9779
+      },
+      "Madinah": {
+        "general_index": 106.1955,
+        "cost_of_living_factor": 1.0165
+      },
+      "Qassim": {
+        "general_index": 109.0773,
+        "cost_of_living_factor": 1.0441
+      },
+      "Eastern Province": {
+        "general_index": 102.7219,
+        "cost_of_living_factor": 0.9833
+      },
+      "Asir": {
+        "general_index": 101.3579,
+        "cost_of_living_factor": 0.9702
+      },
+      "Tabuk": {
+        "general_index": 101.0043,
+        "cost_of_living_factor": 0.9669
+      },
+      "Hail": {
+        "general_index": 104.2856,
+        "cost_of_living_factor": 0.9983
+      },
+      "Northern Border": {
+        "general_index": 103.4531,
+        "cost_of_living_factor": 0.9903
+      },
+      "Jazan": {
+        "general_index": 103.3317,
+        "cost_of_living_factor": 0.9891
+      },
+      "Najran": {
+        "general_index": 106.9064,
+        "cost_of_living_factor": 1.0234
+      },
+      "AL - Baha": {
+        "general_index": 102.729,
+        "cost_of_living_factor": 0.9834
+      },
+      "AL - Jouf": {
+        "general_index": 102.8537,
+        "cost_of_living_factor": 0.9846
+      }
+    }
+  },
+  "household_income_and_expenditure": {
+    "source": "GASTAT Household Income and Consumption Expenditure Survey 2023",
+    "main_indicators": {
+      "Average Household Monthly Disposable Income": {
+        "saudi": 18056,
+        "non_saudi": 5428,
+        "total": 11839
+      },
+      "Median Household Monthly Disposable Income": {
+        "saudi": 13655,
+        "non_saudi": 3657,
+        "total": 7362
+      },
+      "Average Per-capita Monthly Disposable Income": {
+        "saudi": 3977,
+        "non_saudi": 1908,
+        "total": 3195
+      },
+      "Median Per-capita Monthly Disposable Income": {
+        "saudi": 2896,
+        "non_saudi": 1372,
+        "total": 2220
+      },
+      "Average Household Monthly Consumption Expenditure": {
+        "saudi": 16028,
+        "non_saudi": 5574,
+        "total": 10884
+      },
+      "Median Household Monthly Consumption Expenditure": {
+        "saudi": 12767,
+        "non_saudi": 4437,
+        "total": 7654
+      },
+      "Average Monthly Consumption Expenditure Per-capita": {
+        "saudi": 3533,
+        "non_saudi": 1961,
+        "total": 2939
+      },
+      "Median Monthly Consumption Expenditure Per-capita": {
+        "saudi": 2803,
+        "non_saudi": 1665,
+        "total": 2260
+      },
+      "Average Household Monthly Final Monetary Consumption Expenditure": {
+        "saudi": 13536,
+        "non_saudi": 5188,
+        "total": 9426
+      },
+      "Median Household Monthly Final Monetary Consumption Expenditure": {
+        "saudi": 10659,
+        "non_saudi": 4144,
+        "total": 6670
+      },
+      "Average Monthly Final Monetary Consumption Expenditure Per-capita": {
+        "saudi": 2984,
+        "non_saudi": 1825,
+        "total": 2546
+      },
+      "Median Monthly Final Monetary Consumption Expenditure Per-capita": {
+        "saudi": 2353,
+        "non_saudi": 1515,
+        "total": 1952
+      }
+    },
+    "disposable_income_sar_per_month": {
+      "by_region": {
+        "Riyadh": {
+          "saudi": 25995,
+          "non_saudi": 6405,
+          "total": 14990
+        },
+        "Makkah": {
+          "saudi": 15577,
+          "non_saudi": 5425,
+          "total": 10141
+        },
+        "Madinah": {
+          "saudi": 12939,
+          "non_saudi": 5364,
+          "total": 9723
+        },
+        "Qassim": {
+          "saudi": 13958,
+          "non_saudi": 3902,
+          "total": 10081
+        },
+        "Eastern Province": {
+          "saudi": 18661,
+          "non_saudi": 5132,
+          "total": 11775
+        },
+        "Asir": {
+          "saudi": 15820,
+          "non_saudi": 3371,
+          "total": 11264
+        },
+        "Tabuk": {
+          "saudi": 14341,
+          "non_saudi": 5642,
+          "total": 11127
+        },
+        "Hail": {
+          "saudi": 13495,
+          "non_saudi": 3075,
+          "total": 9269
+        },
+        "Northern Border": {
+          "saudi": 16427,
+          "non_saudi": 5398,
+          "total": 12868
+        },
+        "Jazan": {
+          "saudi": 14010,
+          "non_saudi": 4034,
+          "total": 10763
+        },
+        "Najran": {
+          "saudi": 10979,
+          "non_saudi": 3556,
+          "total": 7969
+        },
+        "AL - Baha": {
+          "saudi": 14471,
+          "non_saudi": 4806,
+          "total": 11348
+        },
+        "AL - Jouf": {
+          "saudi": 14712,
+          "non_saudi": 3517,
+          "total": 10686
+        }
+      },
+      "by_age_group": {
+        "15 - 19": {
+          "saudi": 5108,
+          "non_saudi": 3432,
+          "total": 4914
+        },
+        "20 - 24": {
+          "saudi": 8461,
+          "non_saudi": 3514,
+          "total": 6327
+        },
+        "25 - 29": {
+          "saudi": 10997,
+          "non_saudi": 4495,
+          "total": 7522
+        },
+        "30 - 34": {
+          "saudi": 13154,
+          "non_saudi": 4709,
+          "total": 8809
+        },
+        "35 - 39": {
+          "saudi": 16984,
+          "non_saudi": 5831,
+          "total": 10675
+        },
+        "40 - 44": {
+          "saudi": 18132,
+          "non_saudi": 5440,
+          "total": 11201
+        },
+        "45 - 49": {
+          "saudi": 21752,
+          "non_saudi": 5432,
+          "total": 13449
+        },
+        "50 - 54": {
+          "saudi": 23691,
+          "non_saudi": 5731,
+          "total": 14926
+        },
+        "55 - 59": {
+          "saudi": 26146,
+          "non_saudi": 6330,
+          "total": 17512
+        },
+        "60 - 64": {
+          "saudi": 23025,
+          "non_saudi": 6460,
+          "total": 16216
+        },
+        "65+": {
+          "saudi": 17364,
+          "non_saudi": 6242,
+          "total": 14866
+        }
+      },
+      "by_education": {
+        "No schooling": {
+          "saudi": 7700,
+          "non_saudi": 3422,
+          "total": 5792
+        },
+        "Early childhood education": {
+          "saudi": 9326,
+          "non_saudi": 5924,
+          "total": 7243
+        },
+        "Primary education": {
+          "saudi": 11427,
+          "non_saudi": 3494,
+          "total": 6237
+        },
+        "Intermediate education": {
+          "saudi": 14452,
+          "non_saudi": 3600,
+          "total": 6345
+        },
+        "Secondary education": {
+          "saudi": 13901,
+          "non_saudi": 4367,
+          "total": 9165
+        },
+        "Associate diploma": {
+          "saudi": 16787,
+          "non_saudi": 5792,
+          "total": 12246
+        },
+        "Intermediate diploma": {
+          "saudi": 17898,
+          "non_saudi": 4984,
+          "total": 12122
+        },
+        "Bachelor’s or equivalent level": {
+          "saudi": 22136,
+          "non_saudi": 9449,
+          "total": 18014
+        },
+        "Higher diploma": {
+          "saudi": 22816,
+          "non_saudi": 9796,
+          "total": 19173
+        },
+        "Master’s or equivalent level": {
+          "saudi": 40342,
+          "non_saudi": 17729,
+          "total": 33012
+        },
+        "Doctoral or equivalent level": {
+          "saudi": 37355,
+          "non_saudi": 17449,
+          "total": 27885
+        }
+      },
+      "by_marital_status": {
+        "Never Married": {
+          "saudi": 10391,
+          "non_saudi": 4585,
+          "total": 6651
+        },
+        "Married": {
+          "saudi": 19966,
+          "non_saudi": 5596,
+          "total": 12685
+        },
+        "Divorced": {
+          "saudi": 12143,
+          "non_saudi": 4882,
+          "total": 11061
+        },
+        "Widowed": {
+          "saudi": 11082,
+          "non_saudi": 4397,
+          "total": 10680
+        }
+      },
+      "by_dwelling_type": {
+        "Villa": {
+          "saudi": 30167,
+          "non_saudi": 24313,
+          "total": 29965
+        },
+        "Storey in Villa": {
+          "saudi": 17373,
+          "non_saudi": 11442,
+          "total": 16688
+        },
+        "Apartment": {
+          "saudi": 12897,
+          "non_saudi": 5527,
+          "total": 8319
+        },
+        "Traditional house": {
+          "saudi": 10353,
+          "non_saudi": 3826,
+          "total": 7448
+        },
+        "Storey in traditional house": {
+          "saudi": 10866,
+          "non_saudi": 4756,
+          "total": 6494
+        },
+        "Other": {
+          "saudi": 14262,
+          "non_saudi": 2444,
+          "total": 3249
+        }
+      },
+      "by_ownership_type": {
+        "Owned": {
+          "saudi": 21494,
+          "non_saudi": 12144,
+          "total": 21368
+        },
+        "Rented": {
+          "saudi": 13202,
+          "non_saudi": 5599,
+          "total": 8208
+        },
+        "Provided by an employer": {
+          "saudi": 24097,
+          "non_saudi": 4903,
+          "total": 5808
+        },
+        "Provided by others": {
+          "saudi": 11666,
+          "non_saudi": 4142,
+          "total": 10897
+        },
+        "Other": {
+          "saudi": 11198,
+          "non_saudi": 5919,
+          "total": 8801
+        }
+      },
+      "by_household_size": {
+        "1-2": {
+          "saudi": 10794,
+          "non_saudi": 3969,
+          "total": 6013
+        },
+        "3-4": {
+          "saudi": 17001,
+          "non_saudi": 6245,
+          "total": 11471
+        },
+        "5+": {
+          "saudi": 22010,
+          "non_saudi": 8878,
+          "total": 19038
+        }
+      },
+      "sources_pct": {
+        "Labor": {
+          "saudi": 58.69,
+          "non_saudi": 74.75,
+          "total": 66.6
+        },
+        "Property": {
+          "saudi": 1.16,
+          "non_saudi": 0.05,
+          "total": 0.62
+        },
+        "Transfer in": {
+          "saudi": 27.08,
+          "non_saudi": 1.22,
+          "total": 14.35
+        },
+        "Imputed Rent": {
+          "saudi": 11.44,
+          "non_saudi": 5.47,
+          "total": 8.5
+        },
+        "Transfer paid out": {
+          "saudi": -1.63,
+          "non_saudi": -18.51,
+          "total": -9.94
+        }
+      }
+    },
+    "consumption_expenditure_sar_per_month": {
+      "by_region": {
+        "Riyadh": {
+          "saudi": 21971,
+          "non_saudi": 6003,
+          "total": 13000
+        },
+        "Makkah": {
+          "saudi": 12977,
+          "non_saudi": 5811,
+          "total": 9146
+        },
+        "Madinah": {
+          "saudi": 12355,
+          "non_saudi": 5200,
+          "total": 9317
+        },
+        "Qassim": {
+          "saudi": 13628,
+          "non_saudi": 4175,
+          "total": 9983
+        },
+        "Eastern Province": {
+          "saudi": 17898,
+          "non_saudi": 5345,
+          "total": 11509
+        },
+        "Asir": {
+          "saudi": 12864,
+          "non_saudi": 4222,
+          "total": 9701
+        },
+        "Tabuk": {
+          "saudi": 12403,
+          "non_saudi": 5146,
+          "total": 9722
+        },
+        "Hail": {
+          "saudi": 11891,
+          "non_saudi": 3776,
+          "total": 8600
+        },
+        "Northern Border": {
+          "saudi": 13989,
+          "non_saudi": 5687,
+          "total": 11310
+        },
+        "Jazan": {
+          "saudi": 16583,
+          "non_saudi": 6657,
+          "total": 13353
+        },
+        "Najran": {
+          "saudi": 10857,
+          "non_saudi": 4205,
+          "total": 8159
+        },
+        "AL - Baha": {
+          "saudi": 14459,
+          "non_saudi": 4826,
+          "total": 11346
+        },
+        "AL - Jouf": {
+          "saudi": 12722,
+          "non_saudi": 4798,
+          "total": 9872
+        }
+      },
+      "by_age_group": {
+        "15 - 19": {
+          "saudi": 6989,
+          "non_saudi": 4874,
+          "total": 6761
+        },
+        "20 - 24": {
+          "saudi": 8614,
+          "non_saudi": 3910,
+          "total": 6586
+        },
+        "25 - 29": {
+          "saudi": 10128,
+          "non_saudi": 4490,
+          "total": 7096
+        },
+        "30 - 34": {
+          "saudi": 12175,
+          "non_saudi": 4921,
+          "total": 8435
+        },
+        "35 - 39": {
+          "saudi": 15186,
+          "non_saudi": 5552,
+          "total": 9674
+        },
+        "40 - 44": {
+          "saudi": 16534,
+          "non_saudi": 5482,
+          "total": 10550
+        },
+        "45 - 49": {
+          "saudi": 18740,
+          "non_saudi": 5639,
+          "total": 12136
+        },
+        "50 - 54": {
+          "saudi": 20639,
+          "non_saudi": 5656,
+          "total": 13419
+        },
+        "55 - 59": {
+          "saudi": 21689,
+          "non_saudi": 7113,
+          "total": 15163
+        },
+        "60 - 64": {
+          "saudi": 19378,
+          "non_saudi": 7995,
+          "total": 14853
+        },
+        "65+": {
+          "saudi": 16033,
+          "non_saudi": 7220,
+          "total": 14118
+        }
+      },
+      "by_education": {
+        "No schooling": {
+          "saudi": 9042,
+          "non_saudi": 4026,
+          "total": 6824
+        },
+        "Early childhood education": {
+          "saudi": 11169,
+          "non_saudi": 5350,
+          "total": 7705
+        },
+        "Primary education": {
+          "saudi": 13114,
+          "non_saudi": 4495,
+          "total": 7551
+        },
+        "Intermediate education": {
+          "saudi": 15456,
+          "non_saudi": 4456,
+          "total": 7216
+        },
+        "Secondary education": {
+          "saudi": 13752,
+          "non_saudi": 5113,
+          "total": 9465
+        },
+        "Associate diploma": {
+          "saudi": 14633,
+          "non_saudi": 6036,
+          "total": 11101
+        },
+        "Intermediate diploma": {
+          "saudi": 16506,
+          "non_saudi": 5531,
+          "total": 11533
+        },
+        "Bachelor’s or equivalent level": {
+          "saudi": 18060,
+          "non_saudi": 7986,
+          "total": 14743
+        },
+        "Higher diploma": {
+          "saudi": 19979,
+          "non_saudi": 8315,
+          "total": 16680
+        },
+        "Master’s or equivalent level": {
+          "saudi": 27148,
+          "non_saudi": 10413,
+          "total": 21274
+        },
+        "Doctoral or equivalent level": {
+          "saudi": 29518,
+          "non_saudi": 11288,
+          "total": 21793
+        }
+      },
+      "by_marital_status": {
+        "Never Married": {
+          "saudi": 9206,
+          "non_saudi": 4542,
+          "total": 6208
+        },
+        "Married": {
+          "saudi": 17519,
+          "non_saudi": 5760,
+          "total": 11567
+        },
+        "Divorced": {
+          "saudi": 12046,
+          "non_saudi": 5774,
+          "total": 11046
+        },
+        "Widowed": {
+          "saudi": 11079,
+          "non_saudi": 6323,
+          "total": 10823
+        }
+      },
+      "by_dwelling_type": {
+        "Villa": {
+          "saudi": 25056,
+          "non_saudi": 18774,
+          "total": 24830
+        },
+        "Storey in Villa": {
+          "saudi": 15462,
+          "non_saudi": 12052,
+          "total": 15080
+        },
+        "Apartment": {
+          "saudi": 11992,
+          "non_saudi": 5574,
+          "total": 8003
+        },
+        "Traditional house": {
+          "saudi": 10890,
+          "non_saudi": 5054,
+          "total": 8295
+        },
+        "Storey in traditional house": {
+          "saudi": 13266,
+          "non_saudi": 5908,
+          "total": 7987
+        },
+        "Other": {
+          "saudi": 13539,
+          "non_saudi": 2600,
+          "total": 3362
+        }
+      },
+      "by_ownership_type": {
+        "Owned": {
+          "saudi": 18786,
+          "non_saudi": 9839,
+          "total": 18642
+        },
+        "Rented": {
+          "saudi": 12006,
+          "non_saudi": 6111,
+          "total": 8134
+        },
+        "Provided by an employer": {
+          "saudi": 18866,
+          "non_saudi": 4250,
+          "total": 4931
+        },
+        "Provided by others": {
+          "saudi": 12004,
+          "non_saudi": 5217,
+          "total": 11328
+        },
+        "Other": {
+          "saudi": 17080,
+          "non_saudi": 5739,
+          "total": 14499
+        }
+      },
+      "by_household_size": {
+        "1-2": {
+          "saudi": 9327,
+          "non_saudi": 3925,
+          "total": 5564
+        },
+        "3-4": {
+          "saudi": 14797,
+          "non_saudi": 6257,
+          "total": 10316
+        },
+        "5+": {
+          "saudi": 19831,
+          "non_saudi": 10077,
+          "total": 17689
+        }
+      }
+    },
+    "coicop_final_monetary_consumption": {
+      "avg_by_nationality": {
+        "Food and beverages": {
+          "saudi": 3741.5,
+          "non_saudi": 1474.2,
+          "total": 2625.2
+        },
+        "Tobacco": {
+          "saudi": 57.4,
+          "non_saudi": 84.7,
+          "total": 70.9
+        },
+        "Clothing and footwear": {
+          "saudi": 1434.1,
+          "non_saudi": 350.9,
+          "total": 900.9
+        },
+        "Housing, water, electricity, gas and other fuels": {
+          "saudi": 1504.6,
+          "non_saudi": 1154,
+          "total": 1332
+        },
+        "Furnishings, household equipment and routine household maintenance": {
+          "saudi": 1125.6,
+          "non_saudi": 172.8,
+          "total": 656.5
+        },
+        "Health": {
+          "saudi": 265,
+          "non_saudi": 85.5,
+          "total": 176.6
+        },
+        "Transport": {
+          "saudi": 1598,
+          "non_saudi": 361.4,
+          "total": 989.2
+        },
+        "Information and communication": {
+          "saudi": 652.9,
+          "non_saudi": 310.6,
+          "total": 484.4
+        },
+        "Recreation, sport and culture": {
+          "saudi": 594.7,
+          "non_saudi": 73.9,
+          "total": 338.3
+        },
+        "Education services": {
+          "saudi": 178.1,
+          "non_saudi": 61.9,
+          "total": 120.9
+        },
+        "Restaurants and accommodation services": {
+          "saudi": 1528.7,
+          "non_saudi": 657,
+          "total": 1099.5
+        },
+        "Insurance and financial services": {
+          "saudi": 123.3,
+          "non_saudi": 78,
+          "total": 101
+        },
+        "Personal care, social protection and miscellaneous goods and services": {
+          "saudi": 731.9,
+          "non_saudi": 322.6,
+          "total": 530.4
+        }
+      },
+      "pct_by_nationality": {
+        "Food and beverages": {
+          "saudi": 0.2764,
+          "non_saudi": 0.2842,
+          "total": 0.2785
+        },
+        "Tobacco": {
+          "saudi": 0.0042,
+          "non_saudi": 0.0163,
+          "total": 0.0075
+        },
+        "Clothing and footwear": {
+          "saudi": 0.1059,
+          "non_saudi": 0.0676,
+          "total": 0.0956
+        },
+        "Housing, water, electricity, gas and other fuels": {
+          "saudi": 0.1112,
+          "non_saudi": 0.2225,
+          "total": 0.1413
+        },
+        "Furnishings, household equipment and routine household maintenance": {
+          "saudi": 0.0832,
+          "non_saudi": 0.0333,
+          "total": 0.0696
+        },
+        "Health": {
+          "saudi": 0.0196,
+          "non_saudi": 0.0165,
+          "total": 0.0187
+        },
+        "Transport": {
+          "saudi": 0.1181,
+          "non_saudi": 0.0697,
+          "total": 0.1049
+        },
+        "Information and communication": {
+          "saudi": 0.0482,
+          "non_saudi": 0.0599,
+          "total": 0.0514
+        },
+        "Recreation, sport and culture": {
+          "saudi": 0.0439,
+          "non_saudi": 0.0142,
+          "total": 0.0359
+        },
+        "Education services": {
+          "saudi": 0.0132,
+          "non_saudi": 0.0119,
+          "total": 0.0128
+        },
+        "Restaurants and accommodation services": {
+          "saudi": 0.1129,
+          "non_saudi": 0.1266,
+          "total": 0.1166
+        },
+        "Insurance and financial services": {
+          "saudi": 0.0091,
+          "non_saudi": 0.015,
+          "total": 0.0107
+        },
+        "Personal care, social protection and miscellaneous goods and services": {
+          "saudi": 0.0541,
+          "non_saudi": 0.0622,
+          "total": 0.0563
+        }
+      },
+      "avg_by_region": {
+        "Food and beverages": {
+          "Riyadh": 2503.292857,
+          "Makkah": 2440.324351,
+          "Madinah": 2926.341024,
+          "Qassim": 2727.515489,
+          "Eastern Province": 2351.265885,
+          "Asir": 2763.297573,
+          "Tabuk": 3073.482389,
+          "Hail": 2751.869204,
+          "Northern Border": 3476.430504,
+          "Jazan": 3939.030649,
+          "Najran": 3055.93633,
+          "AL - Baha": 3995.048883,
+          "AL - Jouf": 2993.534924
+        },
+        "Tobacco": {
+          "Riyadh": 71.506222,
+          "Makkah": 70.822128,
+          "Madinah": 77.314026,
+          "Qassim": 32.491541,
+          "Eastern Province": 80.348517,
+          "Asir": 35.88222,
+          "Tabuk": 108.384172,
+          "Hail": 72.424686,
+          "Northern Border": 142.756893,
+          "Jazan": 62.402299,
+          "Najran": 27.961538,
+          "AL - Baha": 74.020875,
+          "AL - Jouf": 118.621509
+        },
+        "Clothing and footwear": {
+          "Riyadh": 1028.668804,
+          "Makkah": 741.130982,
+          "Madinah": 806.732363,
+          "Qassim": 709.060299,
+          "Eastern Province": 1056.51243,
+          "Asir": 731.940227,
+          "Tabuk": 943.789475,
+          "Hail": 668.406753,
+          "Northern Border": 974.014823,
+          "Jazan": 1190.5505,
+          "Najran": 649.507831,
+          "AL - Baha": 997.634537,
+          "AL - Jouf": 839.408455
+        },
+        "Housing, water, electricity, gas and other fuels": {
+          "Riyadh": 1359.997525,
+          "Makkah": 1519.955222,
+          "Madinah": 1251.732886,
+          "Qassim": 1029.030892,
+          "Eastern Province": 1356.800915,
+          "Asir": 992.510578,
+          "Tabuk": 1113.010321,
+          "Hail": 981.012701,
+          "Northern Border": 1298.815913,
+          "Jazan": 1371.118008,
+          "Najran": 914.552347,
+          "AL - Baha": 918.243255,
+          "AL - Jouf": 1182.242161
+        },
+        "Furnishings, household equipment and routine household maintenance": {
+          "Riyadh": 947.722776,
+          "Makkah": 420.721827,
+          "Madinah": 437.549069,
+          "Qassim": 484.338135,
+          "Eastern Province": 771.614312,
+          "Asir": 527.791135,
+          "Tabuk": 469.884634,
+          "Hail": 340.545766,
+          "Northern Border": 621.939579,
+          "Jazan": 952.608897,
+          "Najran": 264.114034,
+          "AL - Baha": 603.752755,
+          "AL - Jouf": 455.716522
+        },
+        "Health": {
+          "Riyadh": 190.745271,
+          "Makkah": 136.493179,
+          "Madinah": 181.193534,
+          "Qassim": 193.758476,
+          "Eastern Province": 180.534525,
+          "Asir": 248.833549,
+          "Tabuk": 158.612314,
+          "Hail": 109.7419,
+          "Northern Border": 154.011587,
+          "Jazan": 299.389126,
+          "Najran": 88.355174,
+          "AL - Baha": 224.212753,
+          "AL - Jouf": 127.147117
+        },
+        "Transport": {
+          "Riyadh": 1234.671049,
+          "Makkah": 690.981039,
+          "Madinah": 735.011218,
+          "Qassim": 1234.955986,
+          "Eastern Province": 1063.191881,
+          "Asir": 1100.905997,
+          "Tabuk": 808.110134,
+          "Hail": 864.074305,
+          "Northern Border": 1012.512452,
+          "Jazan": 1156.247243,
+          "Najran": 629.447975,
+          "AL - Baha": 1498.211979,
+          "AL - Jouf": 937.176147
+        },
+        "Information and communication": {
+          "Riyadh": 563.219732,
+          "Makkah": 404.680164,
+          "Madinah": 419.510099,
+          "Qassim": 502.137106,
+          "Eastern Province": 519.923542,
+          "Asir": 502.12029,
+          "Tabuk": 428.287044,
+          "Hail": 401.163605,
+          "Northern Border": 555.653434,
+          "Jazan": 534.681605,
+          "Najran": 317.481569,
+          "AL - Baha": 482.032493,
+          "AL - Jouf": 406.185767
+        },
+        "Recreation, sport and culture": {
+          "Riyadh": 385.819126,
+          "Makkah": 221.250531,
+          "Madinah": 196.908314,
+          "Qassim": 199.979966,
+          "Eastern Province": 621.492082,
+          "Asir": 190.145726,
+          "Tabuk": 169.574569,
+          "Hail": 109.124988,
+          "Northern Border": 238.790864,
+          "Jazan": 530.558898,
+          "Najran": 117.388826,
+          "AL - Baha": 514.669278,
+          "AL - Jouf": 209.379903
+        },
+        "Education services": {
+          "Riyadh": 289.690849,
+          "Makkah": 36.32754,
+          "Madinah": 59.201283,
+          "Qassim": 52.936857,
+          "Eastern Province": 113.713472,
+          "Asir": 38.585345,
+          "Tabuk": 40.962054,
+          "Hail": 15.31407,
+          "Northern Border": 63.909799,
+          "Jazan": 30.124366,
+          "Najran": 9.543882,
+          "AL - Baha": 9.752105,
+          "AL - Jouf": 31.106435
+        },
+        "Restaurants and accommodation services": {
+          "Riyadh": 1255.959601,
+          "Makkah": 887.717811,
+          "Madinah": 1216.188961,
+          "Qassim": 664.991883,
+          "Eastern Province": 1248.003731,
+          "Asir": 782.530029,
+          "Tabuk": 1217.592345,
+          "Hail": 645.891163,
+          "Northern Border": 951.857693,
+          "Jazan": 1986.441232,
+          "Najran": 590.740218,
+          "AL - Baha": 1129.747404,
+          "AL - Jouf": 943.062666
+        },
+        "Insurance and financial services": {
+          "Riyadh": 129.836452,
+          "Makkah": 79.568325,
+          "Madinah": 61.379032,
+          "Qassim": 102.517703,
+          "Eastern Province": 110.009752,
+          "Asir": 89.612707,
+          "Tabuk": 114.319847,
+          "Hail": 73.402714,
+          "Northern Border": 94.381369,
+          "Jazan": 81.095847,
+          "Najran": 102.815434,
+          "AL - Baha": 80.65028,
+          "AL - Jouf": 130.924696
+        },
+        "Personal care, social protection and miscellaneous goods and services": {
+          "Riyadh": 703.191036,
+          "Makkah": 390.675534,
+          "Madinah": 406.04557,
+          "Qassim": 452.84197,
+          "Eastern Province": 618.519845,
+          "Asir": 424.520886,
+          "Tabuk": 444.387729,
+          "Hail": 240.201593,
+          "Northern Border": 537.791556,
+          "Jazan": 704.537542,
+          "Najran": 256.984543,
+          "AL - Baha": 462.778481,
+          "AL - Jouf": 381.095833
+        }
+      },
+      "pct_by_region": {
+        "Food and beverages": {
+          "Riyadh": 0.2347,
+          "Makkah": 0.3035,
+          "Madinah": 0.3335,
+          "Qassim": 0.3252,
+          "Eastern Province": 0.233,
+          "Asir": 0.3278,
+          "Tabuk": 0.3381,
+          "Hail": 0.3784,
+          "Northern Border": 0.3434,
+          "Jazan": 0.3068,
+          "Najran": 0.435,
+          "AL - Baha": 0.3635,
+          "AL - Jouf": 0.3419
+        },
+        "Tobacco": {
+          "Riyadh": 0.0067,
+          "Makkah": 0.0088,
+          "Madinah": 0.0088,
+          "Qassim": 0.0039,
+          "Eastern Province": 0.008,
+          "Asir": 0.0043,
+          "Tabuk": 0.0119,
+          "Hail": 0.01,
+          "Northern Border": 0.0141,
+          "Jazan": 0.0049,
+          "Najran": 0.004,
+          "AL - Baha": 0.0067,
+          "AL - Jouf": 0.0135
+        },
+        "Clothing and footwear": {
+          "Riyadh": 0.0965,
+          "Makkah": 0.0922,
+          "Madinah": 0.0919,
+          "Qassim": 0.0846,
+          "Eastern Province": 0.1047,
+          "Asir": 0.0868,
+          "Tabuk": 0.1038,
+          "Hail": 0.0919,
+          "Northern Border": 0.0962,
+          "Jazan": 0.0927,
+          "Najran": 0.0925,
+          "AL - Baha": 0.0908,
+          "AL - Jouf": 0.0959
+        },
+        "Housing, water, electricity, gas and other fuels": {
+          "Riyadh": 0.1275,
+          "Makkah": 0.189,
+          "Madinah": 0.1426,
+          "Qassim": 0.1227,
+          "Eastern Province": 0.1344,
+          "Asir": 0.1178,
+          "Tabuk": 0.1224,
+          "Hail": 0.1349,
+          "Northern Border": 0.1283,
+          "Jazan": 0.1068,
+          "Najran": 0.1302,
+          "AL - Baha": 0.0835,
+          "AL - Jouf": 0.135
+        },
+        "Furnishings, household equipment and routine household maintenance": {
+          "Riyadh": 0.0889,
+          "Makkah": 0.0523,
+          "Madinah": 0.0499,
+          "Qassim": 0.0577,
+          "Eastern Province": 0.0765,
+          "Asir": 0.0626,
+          "Tabuk": 0.0517,
+          "Hail": 0.0468,
+          "Northern Border": 0.0614,
+          "Jazan": 0.0742,
+          "Najran": 0.0376,
+          "AL - Baha": 0.0549,
+          "AL - Jouf": 0.052
+        },
+        "Health": {
+          "Riyadh": 0.0179,
+          "Makkah": 0.017,
+          "Madinah": 0.0206,
+          "Qassim": 0.0231,
+          "Eastern Province": 0.0179,
+          "Asir": 0.0295,
+          "Tabuk": 0.0174,
+          "Hail": 0.0151,
+          "Northern Border": 0.0152,
+          "Jazan": 0.0233,
+          "Najran": 0.0126,
+          "AL - Baha": 0.0204,
+          "AL - Jouf": 0.0145
+        },
+        "Transport": {
+          "Riyadh": 0.1158,
+          "Makkah": 0.0859,
+          "Madinah": 0.0838,
+          "Qassim": 0.1473,
+          "Eastern Province": 0.1054,
+          "Asir": 0.1306,
+          "Tabuk": 0.0889,
+          "Hail": 0.1188,
+          "Northern Border": 0.1,
+          "Jazan": 0.0901,
+          "Najran": 0.0896,
+          "AL - Baha": 0.1363,
+          "AL - Jouf": 0.107
+        },
+        "Information and communication": {
+          "Riyadh": 0.0528,
+          "Makkah": 0.0503,
+          "Madinah": 0.0478,
+          "Qassim": 0.0599,
+          "Eastern Province": 0.0515,
+          "Asir": 0.0596,
+          "Tabuk": 0.0471,
+          "Hail": 0.0552,
+          "Northern Border": 0.0549,
+          "Jazan": 0.0416,
+          "Najran": 0.0452,
+          "AL - Baha": 0.0439,
+          "AL - Jouf": 0.0464
+        },
+        "Recreation, sport and culture": {
+          "Riyadh": 0.0362,
+          "Makkah": 0.0275,
+          "Madinah": 0.0224,
+          "Qassim": 0.0238,
+          "Eastern Province": 0.0616,
+          "Asir": 0.0226,
+          "Tabuk": 0.0187,
+          "Hail": 0.015,
+          "Northern Border": 0.0236,
+          "Jazan": 0.0413,
+          "Najran": 0.0167,
+          "AL - Baha": 0.0468,
+          "AL - Jouf": 0.0239
+        },
+        "Education services": {
+          "Riyadh": 0.0272,
+          "Makkah": 0.0045,
+          "Madinah": 0.0067,
+          "Qassim": 0.0063,
+          "Eastern Province": 0.0113,
+          "Asir": 0.0046,
+          "Tabuk": 0.0045,
+          "Hail": 0.0021,
+          "Northern Border": 0.0063,
+          "Jazan": 0.0023,
+          "Najran": 0.0014,
+          "AL - Baha": 0.0009,
+          "AL - Jouf": 0.0036
+        },
+        "Restaurants and accommodation services": {
+          "Riyadh": 0.1178,
+          "Makkah": 0.1104,
+          "Madinah": 0.1386,
+          "Qassim": 0.0793,
+          "Eastern Province": 0.1237,
+          "Asir": 0.0928,
+          "Tabuk": 0.1339,
+          "Hail": 0.0888,
+          "Northern Border": 0.094,
+          "Jazan": 0.1547,
+          "Najran": 0.0841,
+          "AL - Baha": 0.1028,
+          "AL - Jouf": 0.1077
+        },
+        "Insurance and financial services": {
+          "Riyadh": 0.0122,
+          "Makkah": 0.0099,
+          "Madinah": 0.007,
+          "Qassim": 0.0122,
+          "Eastern Province": 0.0109,
+          "Asir": 0.0106,
+          "Tabuk": 0.0126,
+          "Hail": 0.0101,
+          "Northern Border": 0.0093,
+          "Jazan": 0.0063,
+          "Najran": 0.0146,
+          "AL - Baha": 0.0073,
+          "AL - Jouf": 0.015
+        },
+        "Personal care, social protection and miscellaneous goods and services": {
+          "Riyadh": 0.0659,
+          "Makkah": 0.0486,
+          "Madinah": 0.0463,
+          "Qassim": 0.054,
+          "Eastern Province": 0.0613,
+          "Asir": 0.0504,
+          "Tabuk": 0.0489,
+          "Hail": 0.033,
+          "Northern Border": 0.0531,
+          "Jazan": 0.0549,
+          "Najran": 0.0366,
+          "AL - Baha": 0.0421,
+          "AL - Jouf": 0.0435
+        }
+      }
+    },
+    "health_expenditure_burden_pct_of_households": {
+      "Percentage of household expenditures on health greater than 10% of total household expenditure": 0.0197,
+      "Percentage of household expenditures on health greater than 25% of total household expenditure": 0.0018
+    }
+  },
+  "mersad_expense_category_mapping": {
+    "mapping_definition": {
+      "Food_Expense": [
+        "Food and beverages",
+        "Tobacco"
+      ],
+      "Housing_Expense": [
+        "Housing, water, electricity, gas and other fuels"
+      ],
+      "Transportation_Expense": [
+        "Transport"
+      ],
+      "Entertainment_Expense": [
+        "Recreation, sport and culture",
+        "Restaurants and accommodation services"
+      ],
+      "Healthcare_Expense": [
+        "Health"
+      ],
+      "Other_Expense": [
+        "Clothing and footwear",
+        "Furnishings, household equipment and routine household maintenance",
+        "Information and communication",
+        "Education services",
+        "Insurance and financial services",
+        "Personal care, social protection and miscellaneous goods and services"
+      ]
+    },
+    "shares_by_nationality": {
+      "saudi": {
+        "Food_Expense": 0.2806,
+        "Housing_Expense": 0.1112,
+        "Transportation_Expense": 0.1181,
+        "Entertainment_Expense": 0.1568,
+        "Healthcare_Expense": 0.0196,
+        "Other_Expense": 0.3137
+      },
+      "non_saudi": {
+        "Food_Expense": 0.3005,
+        "Housing_Expense": 0.2225,
+        "Transportation_Expense": 0.0697,
+        "Entertainment_Expense": 0.1408,
+        "Healthcare_Expense": 0.0165,
+        "Other_Expense": 0.2499
+      },
+      "total": {
+        "Food_Expense": 0.286,
+        "Housing_Expense": 0.1413,
+        "Transportation_Expense": 0.1049,
+        "Entertainment_Expense": 0.1525,
+        "Healthcare_Expense": 0.0187,
+        "Other_Expense": 0.2964
+      }
+    },
+    "shares_by_region": {
+      "Riyadh": {
+        "Food_Expense": 0.2414,
+        "Housing_Expense": 0.1275,
+        "Transportation_Expense": 0.1158,
+        "Entertainment_Expense": 0.154,
+        "Healthcare_Expense": 0.0179,
+        "Other_Expense": 0.3435
+      },
+      "Makkah": {
+        "Food_Expense": 0.3123,
+        "Housing_Expense": 0.189,
+        "Transportation_Expense": 0.0859,
+        "Entertainment_Expense": 0.1379,
+        "Healthcare_Expense": 0.017,
+        "Other_Expense": 0.2578
+      },
+      "Madinah": {
+        "Food_Expense": 0.3423,
+        "Housing_Expense": 0.1426,
+        "Transportation_Expense": 0.0838,
+        "Entertainment_Expense": 0.161,
+        "Healthcare_Expense": 0.0206,
+        "Other_Expense": 0.2496
+      },
+      "Qassim": {
+        "Food_Expense": 0.3291,
+        "Housing_Expense": 0.1227,
+        "Transportation_Expense": 0.1473,
+        "Entertainment_Expense": 0.1031,
+        "Healthcare_Expense": 0.0231,
+        "Other_Expense": 0.2747
+      },
+      "Eastern Province": {
+        "Food_Expense": 0.241,
+        "Housing_Expense": 0.1344,
+        "Transportation_Expense": 0.1054,
+        "Entertainment_Expense": 0.1853,
+        "Healthcare_Expense": 0.0179,
+        "Other_Expense": 0.3162
+      },
+      "Asir": {
+        "Food_Expense": 0.3321,
+        "Housing_Expense": 0.1178,
+        "Transportation_Expense": 0.1306,
+        "Entertainment_Expense": 0.1154,
+        "Healthcare_Expense": 0.0295,
+        "Other_Expense": 0.2746
+      },
+      "Tabuk": {
+        "Food_Expense": 0.35,
+        "Housing_Expense": 0.1224,
+        "Transportation_Expense": 0.0889,
+        "Entertainment_Expense": 0.1526,
+        "Healthcare_Expense": 0.0174,
+        "Other_Expense": 0.2686
+      },
+      "Hail": {
+        "Food_Expense": 0.3884,
+        "Housing_Expense": 0.1349,
+        "Transportation_Expense": 0.1188,
+        "Entertainment_Expense": 0.1038,
+        "Healthcare_Expense": 0.0151,
+        "Other_Expense": 0.2391
+      },
+      "Northern Border": {
+        "Food_Expense": 0.3575,
+        "Housing_Expense": 0.1283,
+        "Transportation_Expense": 0.1,
+        "Entertainment_Expense": 0.1176,
+        "Healthcare_Expense": 0.0152,
+        "Other_Expense": 0.2812
+      },
+      "Jazan": {
+        "Food_Expense": 0.3117,
+        "Housing_Expense": 0.1068,
+        "Transportation_Expense": 0.0901,
+        "Entertainment_Expense": 0.196,
+        "Healthcare_Expense": 0.0233,
+        "Other_Expense": 0.272
+      },
+      "Najran": {
+        "Food_Expense": 0.439,
+        "Housing_Expense": 0.1302,
+        "Transportation_Expense": 0.0896,
+        "Entertainment_Expense": 0.1008,
+        "Healthcare_Expense": 0.0126,
+        "Other_Expense": 0.2279
+      },
+      "AL - Baha": {
+        "Food_Expense": 0.3702,
+        "Housing_Expense": 0.0835,
+        "Transportation_Expense": 0.1363,
+        "Entertainment_Expense": 0.1496,
+        "Healthcare_Expense": 0.0204,
+        "Other_Expense": 0.2399
+      },
+      "AL - Jouf": {
+        "Food_Expense": 0.3554,
+        "Housing_Expense": 0.135,
+        "Transportation_Expense": 0.107,
+        "Entertainment_Expense": 0.1316,
+        "Healthcare_Expense": 0.0145,
+        "Other_Expense": 0.2564
+      }
+    }
+  }
+}

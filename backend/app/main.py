@@ -6,6 +6,8 @@ from Alert import router as alerts_router
 from blockchain import get_blockchain
 from smart_contract import record_suspicious
 
+from BehaviorAnalysis import router as behavior_router
+
 app = FastAPI(
     title="Marsad API",
     version="1.0.0"
@@ -50,3 +52,4 @@ def blockchain_log():
 app.include_router(wallet_router)
 app.include_router(budget_router)
 app.include_router(alerts_router)
+app.include_router(behavior_router)
