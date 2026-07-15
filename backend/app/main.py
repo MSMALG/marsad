@@ -1,8 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware
 from wallets import router as wallet_router
 from Budget import router as budget_router
 from Alert import router as alerts_router
+from blockchain import get_blockchain
+from smart_contract import record_suspicious
 
 app = FastAPI(
     title="Marsad API",
@@ -19,7 +21,7 @@ app.add_middleware(
 
 @app.get("/")
 def root():
-    return {"message": "Marsad Backend Running "}
+    return {"message": "Marsad Backend Running"}
 
 @app.get("/dashboard")
 def dashboard():
@@ -32,6 +34,18 @@ def dashboard():
         "risk": "Low",
         "recommendation": "Excellent saving habits! Keep it up."
     }
+
+@app.post("/analyze-transaction")
+def analyze_transaction(data: dict = Body(...)):
+    result, proof = record_suspicious(-1, data)
+    return {
+        'suspicious': result,
+        'proof_hash': proof
+    }
+
+@app.get("/blockchain-log")
+def blockchain_log():
+    return get_blockchain()
 
 app.include_router(wallet_router)
 app.include_router(budget_router)
