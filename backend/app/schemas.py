@@ -64,19 +64,19 @@ class BehaviorAnalysisRequest(BaseModel):
     Household_Size: int = Field(..., ge=1, le=20, example=4)
     CPI: float = Field(..., example=1.02)
 
-    Gender: str = Field(..., example="Male")
-    Region: str = Field(..., example="Riyadh")
-    Nationality: str = Field(..., example="Saudi")
-    Marital_Status: str = Field(..., example="Married")
-    Education: str = Field(..., example="Bachelor")
-    Employment_Status: str = Field(..., example="Employed")
-    Occupation: str = Field(..., example="Engineer")
-    Housing_Type: str = Field(..., example="Apartment")
-    Housing_Ownership: str = Field(..., example="Owned")
-    Investment_Profile: str = Field(..., example="Moderate")
-    Risk_Level: str = Field(..., example="Medium")
-    Goal_Type: str = Field(..., example="Emergency Fund")
-    
+    Gender: str = Field(..., min_length=1, max_length=20)
+    Region: str = Field(..., min_length=1, max_length=50)
+    Nationality: str = Field(..., min_length=1, max_length=50)
+    Marital_Status: str = Field(..., min_length=1, max_length=50)
+    Education: str = Field(..., min_length=1, max_length=50)
+    Employment_Status: str = Field(..., min_length=1, max_length=50)
+    Occupation: str = Field(..., min_length=1, max_length=100)
+    Housing_Type: str = Field(..., min_length=1, max_length=50)
+    Housing_Ownership: str = Field(..., min_length=1, max_length=50)
+    Investment_Profile: str = Field(..., min_length=1, max_length=50)
+    Risk_Level: str = Field(..., min_length=1, max_length=20)
+    Goal_Type: str = Field(..., min_length=1, max_length=100)
+
     class Config:
         json_schema_extra = {
             "example": {
