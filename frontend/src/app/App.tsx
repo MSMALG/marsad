@@ -5,10 +5,13 @@ import BottomNav from "../components/BottomNav";
 import Login from "../pages/Login/Login";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Wallets from "../pages/Wallets/Wallets";
+import WalletsOverview from "../pages/Wallets/WalletsOverview";
+import WalletGenerator from "../pages/Wallets/WalletGenerator";
+import AIChat from "../pages/Wallets/AIChat_page";
 import Expenses from "../pages/Expenses/Expenses";
 import CheaperAlternative from "../pages/cheaper-alternative/CheaperAlternative";
 import Security from "../pages/security/Security";
-
+import Investment from "../pages/Investment/Investment";
 import Travel from "../pages/travel/Travel";
 import CountrySelect from "../pages/CountrySelect/CountrySelect";
 import Rewards from "../pages/rewards/Rewards";
@@ -19,11 +22,14 @@ type Page =
   | "login"
   | "dashboard"
   | "wallets"
+  | "wallet-detail"
+  | "wallet-generator"
+  | "ai-chat"
   | "expenses"
+  | "investment"
   | "security"
   | "cheaper-alternative"
   | "travel";
-
 const DEFAULT_COUNTRY: Country = {
   flag: "🇺🇸",
   nameAr: "الولايات المتحدة",
@@ -34,6 +40,7 @@ const DEFAULT_COUNTRY: Country = {
 
 export default function App() {
   const [page, setPage] = useState<Page>("login");
+  const [selectedWalletId, setSelectedWalletId] = useState<number | undefined>(undefined);
 
   const [travelScreen, setTravelScreen] = useState<Screen>("travel");
   const [prevScreen, setPrevScreen] = useState<Screen | null>(null);
@@ -56,9 +63,32 @@ export default function App() {
       case "login":
         return <Login onLogin={() => setPage("dashboard")} />;
       case "dashboard":
-        return <Dashboard />;
+        return (
+          <Dashboard
+            onOpenWallet={(id) => { setSelectedWalletId(id); setPage("wallet-detail"); }}
+          />
+        );
       case "wallets":
-        return <Wallets />;
+        return (
+          <WalletsOverview
+            onOpenWallet={(id) => { setSelectedWalletId(id); setPage("wallet-detail"); }}
+            onCreateNew={() => setPage("wallet-generator")}
+            onOpenChat={() => setPage("ai-chat")}
+          />
+        );
+      case "wallet-detail":
+        return (
+          <Wallets
+            initialWalletId={selectedWalletId}
+            onCreateNew={() => setPage("wallet-generator")}
+            onOpenChat={() => setPage("ai-chat")}
+            onBack={() => setPage("wallets")}
+          />
+        );
+      case "wallet-generator":
+        return <WalletGenerator onBack={() => setPage("wallets")} />;
+      case "ai-chat":
+        return <AIChat onBack={() => setPage("wallets")} />;
       case "expenses":
         return <Expenses />;
       case "security":
@@ -89,6 +119,8 @@ export default function App() {
           return <Rewards onBack={() => navigateTravel("travel", "back")} />;
         }
         return null;
+        case "investment":
+  return <Investment />;
       default:
         return null;
     }

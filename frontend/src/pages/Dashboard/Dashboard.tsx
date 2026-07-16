@@ -9,9 +9,11 @@ import {
   Flame,
   AlertTriangle,
   Shield,
-  Diamond,
   Plane,
-  Plus,
+  Heart,
+  Car,
+  Home as HomeIcon,
+  ShieldAlert,
 } from "lucide-react";
 
 type DashboardData = {
@@ -27,8 +29,9 @@ type DashboardData = {
 type WalletData = {
   id: number;
   name: string;
+  icon_key: string;
   saved: number;
-  goal: number;
+  target_amount: number;
   progress: number;
 };
 
@@ -38,10 +41,36 @@ type AlertData = {
   التفاصيل: string;
 };
 
-const WALLET_COLORS = ["#43674F", "#7FA6A1", "#C9B57A", "#4F7C5B"];
-const WALLET_ICONS = [Diamond, Plane, Diamond, Plane];
+// Same icon + gradient mapping as WalletsOverview.tsx, kept in sync so a
+// wallet looks identical wherever it appears in the app.
+const WALLET_ICON_MAP: Record<string, any> = {
+  travel: Plane,
+  wedding: Heart,
+  car: Car,
+  house: HomeIcon,
+  emergency_fund: ShieldAlert,
+  custom: Target,
+};
+const WALLET_GRADIENT_MAP: Record<string, string> = {
+  travel: "linear-gradient(135deg, #3E5C52 0%, #6B7A4A 100%)",
+  wedding: "linear-gradient(135deg, #6B4F55 0%, #C9A06B 100%)",
+  car: "linear-gradient(135deg, #2E3E52 0%, #6B8A8F 100%)",
+  house: "linear-gradient(135deg, #3A4A3E 0%, #B0A05E 100%)",
+  emergency_fund: "linear-gradient(135deg, #4A2E2E 0%, #C98F6B 100%)",
+  custom: "linear-gradient(135deg, #37463A 0%, #C9B06B 100%)",
+};
 
-export default function Dashboard() {
+// Only show wallets that are meaningfully close to their goal on the
+// dashboard summary -- the full list (all wallets, any progress) lives on
+// the dedicated Wallets page. Threshold + cap are easy to tune here.
+const NEAR_COMPLETION_THRESHOLD = 40; // percent
+const MAX_DASHBOARD_WALLETS = 3;
+
+type Props = {
+  onOpenWallet?: (id: number) => void;
+};
+
+export default function Dashboard({ onOpenWallet }: Props) {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
   const [wallets, setWallets] = useState<WalletData[] | null>(null);
   const [alerts, setAlerts] = useState<AlertData[] | null>(null);
@@ -86,11 +115,11 @@ export default function Dashboard() {
           <div className="flex-1">
             <h1
               className="font-bold"
-              style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#333333', fontSize: 17, lineHeight: '22px', marginBottom: 2 }}
+              style={{ fontFamily: 'Tajawal, sans-serif', color: '#333333', fontSize: 17, lineHeight: '22px', marginBottom: 2 }}
             >
              أهلاً {dashboard.user}
             </h1>
-            <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 11, lineHeight: '15px' }}>
+            <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 11, lineHeight: '15px' }}>
               يرصد فلوسك ويصون مستقبلك
             </p>
           </div>
@@ -110,7 +139,7 @@ export default function Dashboard() {
           className="inline-block bg-[#FBF8F0] rounded-full"
           style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 3, paddingBottom: 3 }}
         >
-          <span style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#C9B57A', fontSize: 10, fontWeight: 600 }}>
+          <span style={{ fontFamily: 'Cairo, sans-serif', color: '#C9B57A', fontSize: 10, fontWeight: 600 }}>
             1,240 نقطة
           </span>
         </div>
@@ -120,29 +149,29 @@ export default function Dashboard() {
       <div className="px-5" style={{ marginBottom: 7 }}>
         <div className="bg-[#43674F] relative" style={{ borderRadius: 18, padding: 14 }}>
           <div className="flex items-center justify-between" style={{ marginBottom: 5 }}>
-            <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#FFFFFF', fontSize: 11 }}>الرصيد الحالي</p>
+            <p style={{ fontFamily: 'Cairo, sans-serif', color: '#FFFFFF', fontSize: 11 }}>الرصيد الحالي</p>
             <button><Eye size={16} color="#FFFFFF" /></button>
           </div>
           <div
             className="font-bold"
-            style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#FFFFFF', fontSize: 28, lineHeight: '36px', marginBottom: 10 }}
+            style={{ fontFamily: 'Tajawal, sans-serif', color: '#FFFFFF', fontSize: 28, lineHeight: '36px', marginBottom: 10 }}
           >
             {dashboard.balance.toLocaleString()} ر.س
           </div>
           <div className="flex" style={{ gap: 8 }}>
             <div className="flex-1 bg-[#F2EDE2]" style={{ borderRadius: 10, padding: 8 }}>
-              <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 9, lineHeight: '13px', marginBottom: 2 }}>
+              <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 9, lineHeight: '13px', marginBottom: 2 }}>
                 وفرتِ هذا الشهر
               </p>
-              <p className="font-bold" style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#2F3E34', fontSize: 13, lineHeight: '17px' }}>
+              <p className="font-bold" style={{ fontFamily: 'Tajawal, sans-serif', color: '#2F3E34', fontSize: 13, lineHeight: '17px' }}>
                 {dashboard.savings.toLocaleString()} ر.س
               </p>
             </div>
             <div className="flex-1 bg-[#F2EDE2]" style={{ borderRadius: 10, padding: 8 }}>
-              <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 9, lineHeight: '13px', marginBottom: 2 }}>
+              <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 9, lineHeight: '13px', marginBottom: 2 }}>
                 المتوقع نهاية الشهر
               </p>
-              <p className="font-bold" style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#333333', fontSize: 13, lineHeight: '17px' }}>
+              <p className="font-bold" style={{ fontFamily: 'Tajawal, sans-serif', color: '#333333', fontSize: 13, lineHeight: '17px' }}>
                 18,100 ر.س
               </p>
             </div>
@@ -154,12 +183,12 @@ export default function Dashboard() {
       <div className="px-5" style={{ marginBottom: 7 }}>
         <div className="bg-white" style={{ borderRadius: 18, padding: '9px 12px' }}>
           <div className="flex items-center justify-between" style={{ marginBottom: 4 }}>
-            <h3 className="font-bold" style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#333333', fontSize: 12 }}>
+            <h3 className="font-bold" style={{ fontFamily: 'Tajawal, sans-serif', color: '#333333', fontSize: 12 }}>
               هدف الميزانية
             </h3>
             <Target size={14} color="#2F3E34" />
           </div>
-          <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px', marginBottom: 5 }}>
+          <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px', marginBottom: 5 }}>
             ملتزمة بميزانيتك 78%
           </p>
           <div className="w-full bg-gray-200 rounded-full" style={{ height: 5, marginBottom: 5 }}>
@@ -167,7 +196,7 @@ export default function Dashboard() {
           </div>
           <div className="flex items-center" style={{ gap: 5 }}>
             <Flame size={11} color="#C9B57A" />
-            <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>
+            <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>
               12 يوم متتالي
             </p>
           </div>
@@ -186,11 +215,11 @@ export default function Dashboard() {
               <div className="flex-1">
                 <h4
                   className="font-bold"
-                  style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#333333', fontSize: 11, lineHeight: '15px', marginBottom: 1 }}
+                  style={{ fontFamily: 'Tajawal, sans-serif', color: '#333333', fontSize: 11, lineHeight: '15px', marginBottom: 1 }}
                 >
                   {budgetAlert.العنوان}
                 </h4>
-                <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>
+                <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>
                   {budgetAlert.التفاصيل}
                 </p>
               </div>
@@ -198,7 +227,7 @@ export default function Dashboard() {
             <button
               className="bg-[#C9B57A] text-white font-medium"
               style={{
-                fontFamily: 'readex-pro-vf, sans-serif',
+                fontFamily: 'Cairo, sans-serif',
                 fontSize: 10,
                 borderRadius: 8,
                 padding: '4px 12px'
@@ -222,18 +251,18 @@ export default function Dashboard() {
               <div className="flex-1">
                 <h4
                   className="font-bold"
-                  style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#8B2020', fontSize: 11, lineHeight: '15px', marginBottom: 1 }}
+                  style={{ fontFamily: 'Tajawal, sans-serif', color: '#8B2020', fontSize: 11, lineHeight: '15px', marginBottom: 1 }}
                 >
                   {securityAlert.العنوان}
                 </h4>
-                <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>
+                <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>
                   {securityAlert.التفاصيل}
                 </p>
               </div>
             </div>
             <button
               className="bg-[#2F3E34] text-white font-medium"
-              style={{ fontFamily: 'readex-pro-vf, sans-serif', fontSize: 10, borderRadius: 8, padding: '4px 12px' }}
+              style={{ fontFamily: 'Cairo, sans-serif', fontSize: 10, borderRadius: 8, padding: '4px 12px' }}
             >
               عرض التفاصيل
             </button>
@@ -244,7 +273,7 @@ export default function Dashboard() {
       {/* Smart Wallets */}
       <div className="px-5">
         <div className="flex items-center justify-between" style={{ marginBottom: 8 }}>
-          <h3 className="font-bold" style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#333333', fontSize: 15 }}>
+          <h3 className="font-bold" style={{ fontFamily: 'Tajawal, sans-serif', color: '#333333', fontSize: 15 }}>
             محافظتي
           </h3>
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2F3E34" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -255,36 +284,41 @@ export default function Dashboard() {
         </div>
 
         {!wallets && (
-          <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 11, marginBottom: 8 }}>
+          <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 11, marginBottom: 8 }}>
             جارِ تحميل المحافظ...
           </p>
         )}
 
-        {wallets && wallets.map((w, i) => {
-          const Icon = WALLET_ICONS[i % WALLET_ICONS.length];
-          const color = WALLET_COLORS[i % WALLET_COLORS.length];
+        {wallets && wallets
+          .filter((w) => w.progress >= NEAR_COMPLETION_THRESHOLD)
+          .sort((a, b) => b.progress - a.progress)
+          .slice(0, MAX_DASHBOARD_WALLETS)
+          .map((w) => {
+          const Icon = WALLET_ICON_MAP[w.icon_key] ?? WALLET_ICON_MAP.custom;
+          const gradient = WALLET_GRADIENT_MAP[w.icon_key] ?? WALLET_GRADIENT_MAP.custom;
           return (
-            <div key={w.id} style={{ backgroundColor: color, borderRadius: 18, padding: 12, marginBottom: 7 }}>
+            <div key={w.id} style={{ background: gradient, borderRadius: 18, padding: 12, marginBottom: 7, boxShadow: "0 6px 16px rgba(0,0,0,0.12)" }}>
               <div className="flex items-start justify-between" style={{ marginBottom: 5 }}>
-                <h4 className="font-bold" style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#FFFFFF', fontSize: 13, lineHeight: '18px' }}>
+                <h4 className="font-bold" style={{ fontFamily: 'Tajawal, sans-serif', color: '#FFFFFF', fontSize: 13, lineHeight: '18px' }}>
                   {w.name}
                 </h4>
                 <Icon size={15} color="#FFFFFF" />
               </div>
-              <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#FFFFFF', fontSize: 11, lineHeight: '16px', marginBottom: 5 }}>
-                {w.saved.toLocaleString()} / {w.goal.toLocaleString()} ر.س
+              <p style={{ fontFamily: 'Cairo, sans-serif', color: '#FFFFFF', fontSize: 11, lineHeight: '16px', marginBottom: 5 }}>
+                {w.saved.toLocaleString()} / {w.target_amount.toLocaleString()} ر.س
               </p>
               <div className="w-full rounded-full" style={{ height: 5, marginBottom: 7, backgroundColor: "rgba(0,0,0,0.15)" }}>
                 <div className="bg-[#C9B57A] rounded-full" style={{ height: 5, width: `${w.progress}%` }} />
               </div>
               <div className="flex items-center justify-between">
                 <button
+                  onClick={() => onOpenWallet?.(w.id)}
                   className="border border-white text-white"
-                  style={{ fontFamily: 'readex-pro-vf, sans-serif', fontSize: 10, borderRadius: 8, padding: '3px 10px' }}
+                  style={{ fontFamily: 'Cairo, sans-serif', fontSize: 10, borderRadius: 8, padding: '3px 10px', cursor: onOpenWallet ? "pointer" : "default" }}
                 >
                   عرض التفاصيل
                 </button>
-                <span className="font-bold" style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#FFFFFF', fontSize: 12 }}>
+                <span className="font-bold" style={{ fontFamily: 'Tajawal, sans-serif', color: '#FFFFFF', fontSize: 12 }}>
                   {w.progress}%
                 </span>
               </div>
@@ -292,15 +326,11 @@ export default function Dashboard() {
           );
         })}
 
-        <button
-          className="w-full bg-[#F2EDE2] border-2 border-dashed border-[#C9B57A] flex items-center justify-center"
-          style={{ height: 38, borderRadius: 18, gap: 6 }}
-        >
-          <Plus size={14} color="#2F3E34" />
-          <span style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#2F3E34', fontSize: 11, fontWeight: 500 }}>
-            إضافة محفظة جديدة
-          </span>
-        </button>
+        {wallets && wallets.filter((w) => w.progress >= NEAR_COMPLETION_THRESHOLD).length === 0 && (
+          <p style={{ fontFamily: 'Cairo, sans-serif', color: '#999999', fontSize: 11, textAlign: 'center', padding: '12px 0' }}>
+            لا توجد محافظ قريبة من هدفها حاليًا
+          </p>
+        )}
       </div>
     </div>
   );
