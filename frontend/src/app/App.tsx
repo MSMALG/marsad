@@ -22,6 +22,7 @@ type Page =
   | "expenses"
   | "security"
   | "cheaper-alternative"
+  | "rewards"
   | "travel";
 
 const DEFAULT_COUNTRY: Country = {
@@ -51,18 +52,28 @@ export default function App() {
     navigateTravel("travel", "back");
   };
 
+  const getActiveTab = () => {
+    if (page === "dashboard") return "home";
+    if (page === "expenses") return "expenses";
+    if (page === "travel") return "invest";
+    return "more";
+  };
+
+
   const renderContent = () => {
     switch (page) {
       case "login":
         return <Login onLogin={() => setPage("dashboard")} />;
       case "dashboard":
-        return <Dashboard />;
+        return <Dashboard onNavigate={(p) => setPage(p as Page)} />;
       case "wallets":
         return <Wallets />;
       case "expenses":
         return <Expenses />;
       case "security":
         return <Security />;
+        case "rewards":
+  return <Rewards onBack={() => setPage("dashboard")} />;
       case "cheaper-alternative":
         return <CheaperAlternative />;
       case "travel":
@@ -92,6 +103,7 @@ export default function App() {
       default:
         return null;
     }
+    
   };
 
   const showNav = page !== "login";
@@ -99,7 +111,12 @@ export default function App() {
   return (
     <PhoneShell>
       {renderContent()}
-      {showNav && <BottomNav active={page} onNavigate={setPage} />}
+    {showNav && (
+  <BottomNav 
+    active={page as any} 
+    onNavigate={(p) => setPage(p as Page)} 
+  />
+)}
     </PhoneShell>
   );
 }
