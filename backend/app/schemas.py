@@ -58,24 +58,25 @@ class PredictionResponse(BaseModel):
  
  
 class BehaviorAnalysisRequest(BaseModel):
-    Age: int
-    Monthly_Income: float
-    Monthly_Salary: float
-    Household_Size: int
-    CPI: float
-    Gender: str
-    Region: str
-    Nationality: str
-    Marital_Status: str
-    Education: str
-    Employment_Status: str
-    Occupation: str
-    Housing_Type: str
-    Housing_Ownership: str
-    Investment_Profile: str
-    Risk_Level: str
-    Goal_Type: str
- 
+    Age: int = Field(..., ge=18, le=100, example=30)
+    Monthly_Income: float = Field(..., ge=0, example=12000)
+    Monthly_Salary: float = Field(..., ge=0, example=10000)
+    Household_Size: int = Field(..., ge=1, le=20, example=4)
+    CPI: float = Field(..., example=1.02)
+
+    Gender: str = Field(..., example="Male")
+    Region: str = Field(..., example="Riyadh")
+    Nationality: str = Field(..., example="Saudi")
+    Marital_Status: str = Field(..., example="Married")
+    Education: str = Field(..., example="Bachelor")
+    Employment_Status: str = Field(..., example="Employed")
+    Occupation: str = Field(..., example="Engineer")
+    Housing_Type: str = Field(..., example="Apartment")
+    Housing_Ownership: str = Field(..., example="Owned")
+    Investment_Profile: str = Field(..., example="Moderate")
+    Risk_Level: str = Field(..., example="Medium")
+    Goal_Type: str = Field(..., example="Emergency Fund")
+    
     class Config:
         json_schema_extra = {
             "example": {

@@ -32,7 +32,10 @@ def get_category_breakdown(predicted_expenses: float, nationality: str) -> list[
     """
     rules = get_business_rules()
     shares_by_nat = rules["mersad_expense_category_mapping"]["shares_by_nationality"]
-    key = "saudi" if nationality == "Saudi" else "non_saudi"
+
+    nationality_normalized = nationality.strip().lower()
+    key = "saudi" if nationality_normalized == "saudi" else "non_saudi"
+
     shares = shares_by_nat.get(key, shares_by_nat["total"])
 
     breakdown = []
