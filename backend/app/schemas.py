@@ -249,3 +249,4 @@ class WalletContext(BaseModel):
 class ChatRequest(BaseModel):
     messages: List[ChatMessage]
     wallets: Optional[List[WalletContext]] = None
+    blockchain_hash: str | None = None

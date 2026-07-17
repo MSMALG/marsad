@@ -18,20 +18,9 @@ export default function PhoneShell({ children }: { children: ReactNode }) {
           className="absolute top-0 left-0 right-0 flex items-end justify-between px-7 z-10"
           style={{ height: 59, paddingBottom: 11 }}
         >
-          <span
-            style={{ fontFamily: "'readex-pro-vf', sans-serif" }}
-            className="text-[15px] font-bold text-[#2E352F]"
-          >
-            9:41
-          </span>
-          <div className="flex items-center gap-1.5">
-            <svg width="18" height="12" viewBox="0 0 18 12">
-              <rect x="0" y="6" width="3.2" height="6" rx="1" fill="#2E352F" />
-              <rect x="4.7" y="4" width="3.2" height="8" rx="1" fill="#2E352F" />
-              <rect x="9.4" y="2" width="3.2" height="10" rx="1" fill="#2E352F" />
-              <rect x="14.1" y="0" width="3.2" height="12" rx="1" fill="#2E352F" />
-            </svg>
-          </div>
+          
+         
+         
         </div>
 
         {/* Scrollable page content, page controls its own top padding under status bar */}

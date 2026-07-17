@@ -1,149 +1,119 @@
-import {
-  Home,
-  TrendingUp,
-  LayoutGrid,
-  Receipt,
-  Plus,
-} from "lucide-react";
+import { Home, PieChart, Plane, Grid3x3, PlusCircle } from "lucide-react";
 
-import { C, F } from "./constants";
-
-interface BottomNavProps {
-  activeTab?: string;
-}
+type PageKey =
+  | "dashboard"
+  | "expenses"
+  | "wallets"
+  | "cheaper-alternative"
+  | "security"
+  | "travel"
+  | "more";
 
 export default function BottomNav({
-  activeTab = "more",
-}: BottomNavProps) {
-  const tabs = [
-    {
-      id: "home",
-      label: "الرئيسية",
-      Icon: Home,
-    },
-    {
-      id: "expenses",
-      label: "المصروفات",
-      Icon: Receipt,
-    },
-    {
-      id: "invest",
-      label: "الاستثمار",
-      Icon: TrendingUp,
-    },
-    {
-      id: "more",
-      label: "المزيد",
-      Icon: LayoutGrid,
-    },
-  ];
-
-  const items: React.ReactNode[] = [];
-
-  tabs.forEach((tab, i) => {
-    if (i === 2) {
-      items.push(
-        <div
-          key="fab"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              width: 48,
-              height: 48,
-              borderRadius: 16,
-              background: C.primary,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow:
-                "0 6px 20px rgba(78,107,83,0.35)",
-            }}
-          >
-            <Plus
-              size={22}
-              color="#fff"
-              strokeWidth={2}
-            />
-          </div>
-        </div>
-      );
-    }
-
-    const isActive = tab.id === activeTab;
-
-    items.push(
+  active,
+  onNavigate,
+}: {
+  active: PageKey;
+  onNavigate: (page: PageKey) => void;
+}) {
+  return (
+    <div
+      className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex items-center justify-around z-30"
+      style={{ height: 66, paddingLeft: 20, paddingRight: 20 }}
+    >
+      {/* الرئيسية */}
       <button
-        key={tab.id}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 3,
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          padding: "4px 10px",
-          flex: 1,
-        }}
+        onClick={() => onNavigate("dashboard")}
+        className="flex flex-col items-center"
+        style={{ gap: 2 }}
       >
-        <tab.Icon
+        <Home
           size={20}
-          color={
-            isActive ? C.primary : C.muted
-          }
-          strokeWidth={isActive ? 2 : 1.6}
+          color={active === "dashboard" ? "#2F3E34" : "#999999"}
         />
-
         <span
           style={{
             fontSize: 10,
-            color: isActive
-              ? C.primary
-              : C.muted,
-            fontWeight: isActive
-              ? 600
-              : 400,
-            fontFamily: F,
+            color: active === "dashboard" ? "#2F3E34" : "#999999",
           }}
         >
-          {tab.label}
+          الرئيسية
         </span>
-
-        {isActive && (
-          <div
-            style={{
-              width: 4,
-              height: 4,
-              borderRadius: 2,
-              background: C.primary,
-              marginTop: -2,
-            }}
-          />
-        )}
       </button>
-    );
-  });
 
-  return (
-    <div
-      style={{
-        height: 72,
-        background: C.card,
-        borderTop: `1px solid ${C.border}`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-around",
-        padding: "0 4px",
-        flexShrink: 0,
-      }}
-    >
-      {items}
+      {/* المصروفات */}
+      <button
+        onClick={() => onNavigate("expenses")}
+        className="flex flex-col items-center"
+        style={{ gap: 2 }}
+      >
+        <PieChart
+          size={20}
+          color={active === "expenses" ? "#2F3E34" : "#999999"}
+        />
+        <span
+          style={{
+            fontSize: 10,
+            color: active === "expenses" ? "#2F3E34" : "#999999",
+          }}
+        >
+          المصروفات
+        </span>
+      </button>
+
+      {/* زر المحافظ بالنص */}
+      <button
+        onClick={() => onNavigate("wallets")}
+        className="flex flex-col items-center"
+        style={{ marginTop: -18 }}
+      >
+        <div
+          className="rounded-full bg-[#2F3E34] flex items-center justify-center shadow-lg"
+          style={{ width: 48, height: 48 }}
+        >
+          <PlusCircle size={22} color="#FFFFFF" fill="#2F3E34" />
+        </div>
+      </button>
+
+      {/* الاستثمار */}
+      <button
+        onClick={() => onNavigate("travel")}
+        className="flex flex-col items-center"
+        style={{ gap: 2 }}
+      >
+        <Plane
+          size={20}
+          color={active === "travel" ? "#2F3E34" : "#999999"}
+        />
+        <span
+          style={{
+            fontSize: 10,
+            color: active === "travel" ? "#2F3E34" : "#999999",
+          }}
+        >
+          الاستثمار
+        </span>
+      </button>
+
+      {/* المزيد */}
+      <button
+        onClick={() => onNavigate("more")}
+        className="flex flex-col items-center"
+        style={{ gap: 2 }}
+      >
+        <Grid3x3
+          size={20}
+          color={active === "more" ? "#2F3E34" : "#999999"}
+        />
+        <span
+          style={{
+            fontSize: 10,
+            color: active === "more" ? "#2F3E34" : "#999999",
+          }}
+        >
+          المزيد
+        </span>
+      </button>
     </div>
   );
 }

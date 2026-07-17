@@ -3,7 +3,7 @@ import {
   ArrowRight, ArrowLeft, Plane, Heart, Car, Home as HomeIcon, ShieldAlert, Target,
   Sparkles, CalendarDays, Clock3, MapPin, Plus,
 } from "lucide-react";
-import logo from "../../assets/logo.png";
+import logo from "\..\frontend\src\assets\logo.png";
 
 type Props = {
   onCreateNew?: () => void;

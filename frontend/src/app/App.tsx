@@ -90,12 +90,13 @@ export default function App() {
         return <Login onLogin={() => setPage("dashboard")} />;
 
       case "dashboard":
-        return (
-          <Dashboard
-            onOpenWallet={(id) => { setSelectedWalletId(id); setPage("wallet-detail"); }}
-          />
-        );
-
+  return (
+    <Dashboard
+      onNavigate={(p) => setPage(p as Page)}
+      onOpenWallet={(id) => { setSelectedWalletId(id); setPage("wallet-detail"); }}
+    />
+  );
+        return <Dashboard onNavigate={(p) => setPage(p as Page)} />;
       case "wallets":
         return (
           <WalletsOverview

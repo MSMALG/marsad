@@ -1,10 +1,16 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware
 from wallets import router as wallet_router
 from Budget import router as budget_router
 from Alert import router as alerts_router
+
 from BehaviorAnalysis import router as behavior_router 
 from AIChat import router as chat_router
+
+from blockchain import get_blockchain
+from smart_contract import record_suspicious
+
+
 
 app = FastAPI(
     title="Marsad API",
@@ -13,7 +19,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -34,6 +40,52 @@ def dashboard():
         "risk": "Low",
         "recommendation": "Excellent saving habits! Keep it up."
     }
+
+last_transaction = None
+
+@app.post("/analyze-transaction")
+def analyze_transaction(data: dict = Body(...)):
+    global last_transaction
+
+    amount = data.get("amount", 0)
+    device = data.get("device", "")
+    transaction_type = data.get("type", "")
+
+    suspicious = False
+
+    if amount >= 5000:
+        suspicious = True
+
+    if device == "جهاز غير معروف":
+        suspicious = True
+
+    if transaction_type == "تحويل خارجي":
+        suspicious = True
+
+    if suspicious:
+        last_transaction = data
+
+    return {
+        "suspicious": suspicious,
+        "transaction": data
+    }
+
+
+@app.post("/report-transaction")
+def report_transaction(data: dict = Body(...)):
+    result, proof = record_suspicious(True, data)
+
+    return {
+        "reported": result,
+        "proof_hash": proof
+    }
+@app.get("/last-transaction")
+def get_last_transaction():
+    return last_transaction
+
+@app.get("/blockchain-log")
+def blockchain_log():
+    return get_blockchain()
 
 app.include_router(wallet_router)
 app.include_router(budget_router)

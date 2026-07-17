@@ -254,9 +254,29 @@ export default function CheaperAlternative() {
             </div>
           </div>
 
-          <button style={{ border: '1.5px solid #2F3E34', borderRadius: 10, backgroundColor: 'transparent', color: '#2F3E34', fontSize: 10, fontWeight: 600, paddingInline: 9, paddingBlock: 6, cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 }}>
-            عرض الموقع
-          </button>
+          <button
+  onClick={() =>
+    window.open(
+      "https://maps.app.goo.gl/CGrq1ubAvFcrdSHq7?g_st=ic",
+      "_blank"
+    )
+  }
+  style={{
+    border: "1.5px solid #2F3E34",
+    borderRadius: 10,
+    backgroundColor: "transparent",
+    color: "#2F3E34",
+    fontSize: 10,
+    fontWeight: 600,
+    paddingInline: 9,
+    paddingBlock: 6,
+    cursor: "pointer",
+    whiteSpace: "nowrap",
+    flexShrink: 0,
+  }}
+>
+  عرض الموقع
+</button>
         </div>
 
         {/* AI Recommendation Card */}
