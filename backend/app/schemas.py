@@ -58,24 +58,25 @@ class PredictionResponse(BaseModel):
  
  
 class BehaviorAnalysisRequest(BaseModel):
-    Age: int
-    Monthly_Income: float
-    Monthly_Salary: float
-    Household_Size: int
-    CPI: float
-    Gender: str
-    Region: str
-    Nationality: str
-    Marital_Status: str
-    Education: str
-    Employment_Status: str
-    Occupation: str
-    Housing_Type: str
-    Housing_Ownership: str
-    Investment_Profile: str
-    Risk_Level: str
-    Goal_Type: str
- 
+    Age: int = Field(..., ge=18, le=100, example=30)
+    Monthly_Income: float = Field(..., ge=0, example=12000)
+    Monthly_Salary: float = Field(..., ge=0, example=10000)
+    Household_Size: int = Field(..., ge=1, le=20, example=4)
+    CPI: float = Field(..., example=1.02)
+
+    Gender: str = Field(..., min_length=1, max_length=20)
+    Region: str = Field(..., min_length=1, max_length=50)
+    Nationality: str = Field(..., min_length=1, max_length=50)
+    Marital_Status: str = Field(..., min_length=1, max_length=50)
+    Education: str = Field(..., min_length=1, max_length=50)
+    Employment_Status: str = Field(..., min_length=1, max_length=50)
+    Occupation: str = Field(..., min_length=1, max_length=100)
+    Housing_Type: str = Field(..., min_length=1, max_length=50)
+    Housing_Ownership: str = Field(..., min_length=1, max_length=50)
+    Investment_Profile: str = Field(..., min_length=1, max_length=50)
+    Risk_Level: str = Field(..., min_length=1, max_length=20)
+    Goal_Type: str = Field(..., min_length=1, max_length=100)
+
     class Config:
         json_schema_extra = {
             "example": {

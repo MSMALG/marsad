@@ -42,6 +42,13 @@ type Props = {
   onNavigate: (page: string) => void;
 };
 
+type BudgetData = {
+  الرصيد_الحالي: number;
+  التوفير_هذا_الشهر: number;
+  المتوقع_نهاية_الشهر: number;
+  هدف_الميزانية: number;
+  عدد_الأيام_الملتزم_بها: number;
+};
 
 const WALLET_COLORS = ["#43674F", "#7FA6A1", "#C9B57A", "#4F7C5B"];
 const WALLET_ICONS = [Diamond, Plane, Diamond, Plane];
@@ -51,11 +58,13 @@ export default function Dashboard({ onNavigate }: Props) {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
   const [wallets, setWallets] = useState<WalletData[] | null>(null);
   const [alerts, setAlerts] = useState<AlertData[] | null>(null);
+  const [budget, setBudget] = useState<BudgetData | null>(null);
 
   useEffect(() => {
     api.get("/dashboard").then((res) => setDashboard(res.data)).catch(console.error);
     api.get("/wallets").then((res) => setWallets(res.data)).catch(console.error);
     api.get("/alerts").then((res) => setAlerts(res.data)).catch(console.error);
+    api.get("/budget").then((res) => setBudget(res.data)).catch(console.error);
   }, []);
 
   if (!dashboard) {
@@ -93,29 +102,28 @@ export default function Dashboard({ onNavigate }: Props) {
           </div>
         </div>
         <div
-  onClick={() => onNavigate("rewards")}
-  className="inline-block bg-[#FBF8F0] rounded-full cursor-pointer"
-  style={{
-    paddingLeft: 12,
-    paddingRight: 12,
-    paddingTop: 3,
-    paddingBottom: 3,
-  }}
->
-  <span
-    style={{
-      fontFamily: "readex-pro-vf, sans-serif",
-      color: "#C9B57A",
-      fontSize: 10,
-      fontWeight: 600,
-    }}
-  >
-    1,240 نقطة
-  </span>
-</div>
+          onClick={() => onNavigate("rewards")}
+          className="inline-block bg-[#FBF8F0] rounded-full cursor-pointer"
+          style={{
+            paddingLeft: 12,
+            paddingRight: 12,
+            paddingTop: 3,
+            paddingBottom: 3,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "readex-pro-vf, sans-serif",
+              color: "#C9B57A",
+              fontSize: 10,
+              fontWeight: 600,
+            }}
+          >
+            1,240 نقطة
+          </span>
+        </div>
       </div>
 
-      {/* Balance Card */}
       <div className="px-5" style={{ marginBottom: 7 }}>
         <div className="bg-[#43674F] relative" style={{ borderRadius: 18, padding: 14 }}>
           <div className="flex items-center justify-between" style={{ marginBottom: 5 }}>
@@ -140,20 +148,23 @@ export default function Dashboard({ onNavigate }: Props) {
         </div>
       </div>
 
-      {/* Budget Goal Card */}
       <div className="px-5" style={{ marginBottom: 7 }}>
         <div className="bg-white" style={{ borderRadius: 18, padding: '9px 12px' }}>
           <div className="flex items-center justify-between" style={{ marginBottom: 4 }}>
             <h3 className="font-bold" style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#333333', fontSize: 12 }}>هدف الميزانية</h3>
             <Target size={14} color="#2F3E34" />
           </div>
-          <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px', marginBottom: 5 }}>ملتزمة بميزانيتك 78%</p>
+          <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px', marginBottom: 5 }}>
+            ملتزمة بميزانيتك {budget?.هدف_الميزانية ?? 0}%
+          </p>
           <div className="w-full bg-gray-200 rounded-full" style={{ height: 5, marginBottom: 5 }}>
-            <div className="bg-[#2F3E34] rounded-full" style={{ height: 5, width: '78%' }} />
+            <div className="bg-[#2F3E34] rounded-full" style={{ height: 5, width: `${budget?.هدف_الميزانية ?? 0}%` }} />
           </div>
           <div className="flex items-center" style={{ gap: 5 }}>
             <Flame size={11} color="#C9B57A" />
-            <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>12 يوم متتالي</p>
+            <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>
+              {budget?.عدد_الأيام_الملتزم_بها ?? 0} يوم متتالي
+            </p>
           </div>
         </div>
       </div>
@@ -210,7 +221,6 @@ export default function Dashboard({ onNavigate }: Props) {
         </div>
       )}
 
-      {/* Smart Wallets */}
       <div className="px-5">
         <div className="flex items-center justify-between" style={{ marginBottom: 8 }}>
           <h3 className="font-bold" style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#333333', fontSize: 15 }}>محافظتي</h3>
@@ -260,10 +270,7 @@ export default function Dashboard({ onNavigate }: Props) {
           );
         })}
 
-        <button
-          className="w-full bg-[#F2EDE2] border-2 border-dashed border-[#C9B57A] flex items-center justify-center"
-          style={{ height: 38, borderRadius: 18, gap: 6 }}
-        >
+        <button className="w-full bg-[#F2EDE2] border-2 border-dashed border-[#C9B57A] flex items-center justify-center" style={{ height: 38, borderRadius: 18, gap: 6 }}>
           <Plus size={14} color="#2F3E34" />
           <span style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#2F3E34', fontSize: 11, fontWeight: 500 }}>
             إضافة محفظة جديدة
