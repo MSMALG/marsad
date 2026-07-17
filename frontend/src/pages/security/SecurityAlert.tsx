@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { api } from "../../api/client";
+
 import { C, F } from "./constants";
 import {
   AlertTriangle,
@@ -6,7 +9,47 @@ import {
 } from "lucide-react";
 
 export default function SecurityAlert({ onNavigate }: { onNavigate: () => void }) {
-  const reasons = ["تحويل في وقت غير معتاد", "جهاز جديد غير معروف", "مبلغ أعلى من نمط الإنفاق"];
+
+  const [transaction, setTransaction] = useState<any>(null);
+
+  useEffect(() => {
+    api
+      .get("/security/logs")
+      .then((res) => {
+        const logs = res.data;
+        if (Array.isArray(logs) && logs.length > 0) {
+          setTransaction(logs[logs.length - 1]);
+        }
+      })
+      .catch(console.error);
+  }, []);
+
+  const parseTransactionDetails = (details?: string) => {
+    if (!details) return {};
+    const amountMatch = details.match(/المبلغ\s*([\d,.]+)\s*ر\.س/);
+    const dateMatch = details.match(/التاريخ\s*([^،]+)/);
+    const timeMatch = details.match(/الوقت\s*([^،]+)/);
+    const locationMatch = details.match(/الموقع\s*([^،]+)/);
+    const deviceMatch = details.match(/الجهاز\s*([^،]+)/);
+    const typeMatch = details.match(/عملية\s*([^،]+)/);
+
+    return {
+      amount: amountMatch?.[1] ? `${amountMatch[1]} ر.س` : undefined,
+      date: dateMatch?.[1]?.trim(),
+      time: timeMatch?.[1]?.trim(),
+      location: locationMatch?.[1]?.trim(),
+      device: deviceMatch?.[1]?.trim(),
+      type: typeMatch?.[1]?.trim(),
+    };
+  };
+
+  const parsedDetails = parseTransactionDetails(transaction?.details);
+
+  const reasons = [
+    "تحويل في وقت غير معتاد",
+    "جهاز جديد غير معروف",
+    "مبلغ أعلى من نمط الإنفاق",
+  ];
 
   return (
     <div
@@ -56,21 +99,77 @@ export default function SecurityAlert({ onNavigate }: { onNavigate: () => void }
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 16px", marginBottom: 14 }}>
-            {[
-              { label: "المبلغ", value: "5,000 ر.س", highlight: true },
-              { label: "التاريخ", value: "08 يوليو 2026" },
-              { label: "الوقت", value: "03:00 ص" },
-              { label: "الموقع", value: "الرياض" },
-              { label: "الجهاز", value: "جهاز غير معروف" },
-              { label: "النوع", value: "تحويل خارجي" },
-            ].map((item) => (
-              <div key={item.label}>
-                <div style={{ fontSize: 10, color: C.muted, fontFamily: F, fontWeight: 500, marginBottom: 2 }}>{item.label}</div>
-                <div style={{ fontSize: 13, color: item.highlight ? C.danger : C.text, fontFamily: F, fontWeight: item.highlight ? 700 : 600 }}>{item.value}</div>
-              </div>
-            ))}
-          </div>
+          <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "10px 16px",
+    marginBottom: 14,
+  }}
+>
+  {[
+    {
+      label: "المبلغ",
+      value: parsedDetails.amount ?? "-",
+      highlight: true,
+    },
+    {
+      label: "التاريخ",
+      value: parsedDetails.date ?? (transaction?.timestamp ? new Date(transaction.timestamp).toLocaleDateString("ar-SA") : "-"),
+      highlight: false,
+    },
+    {
+      label: "الوقت",
+      value: parsedDetails.time ?? (transaction?.timestamp ? new Date(transaction.timestamp).toLocaleTimeString("ar-SA") : "-"),
+      highlight: false,
+    },
+    {
+      label: "الموقع",
+      value: parsedDetails.location ?? "-",
+      highlight: false,
+    },
+    {
+      label: "الجهاز",
+      value: parsedDetails.device ?? "-",
+      highlight: false,
+    },
+    {
+      label: "النوع",
+      value: parsedDetails.type ?? (transaction?.event_type === "suspicious_transaction" ? "عملية مشبوهة" : transaction?.event_type) ?? "-",
+      highlight: false,
+    },
+    {
+      label: "التفاصيل",
+      value: transaction?.details ?? "-",
+      highlight: false,
+    },
+  ].map((item) => (
+    <div key={item.label}>
+      <div
+        style={{
+          fontSize: 10,
+          color: C.muted,
+          fontFamily: F,
+          fontWeight: 500,
+          marginBottom: 2,
+        }}
+      >
+        {item.label}
+      </div>
+
+      <div
+        style={{
+          fontSize: 13,
+          color: item.highlight ? C.danger : C.text,
+          fontFamily: F,
+          fontWeight: item.highlight ? 700 : 600,
+        }}
+      >
+        {item.value}
+      </div>
+    </div>
+  ))}
+</div>
 
           <div style={{ height: 1, background: C.border, marginBottom: 12 }} />
 
@@ -99,11 +198,37 @@ export default function SecurityAlert({ onNavigate }: { onNavigate: () => void }
         }}>
           أنا من قام بهذه العملية
         </button>
-        <button style={{
-          width: "100%", height: 50, borderRadius: 16, background: "transparent",
-          border: `1.5px solid ${C.danger}`, cursor: "pointer", fontSize: 14,
-          fontWeight: 600, color: C.danger, fontFamily: F,
-        }}>
+        <button
+          onClick={async () => {
+            try {
+              await api.post("/security/analyze-transaction", {
+                amount: 5000,
+                date: "08 يوليو 2026",
+                time: "03:00 ص",
+                location: "الرياض",
+                device: "جهاز غير معروف",
+                type: "تحويل خارجي",
+              });
+
+              alert("تم تسجيل العملية في البلوك تشين");
+            } catch (e) {
+              alert("حدث خطأ أثناء الإرسال");
+              console.error(e);
+            }
+          }}
+          style={{
+            width: "100%",
+            height: 50,
+            borderRadius: 16,
+            background: "transparent",
+            border: `1.5px solid ${C.danger}`,
+            cursor: "pointer",
+            fontSize: 14,
+            fontWeight: 600,
+            color: C.danger,
+            fontFamily: F,
+          }}
+        >
           الإبلاغ عن عملية مشبوهة
         </button>
         <button

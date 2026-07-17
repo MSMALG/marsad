@@ -12,18 +12,7 @@ export default function PhoneShell({ children }: { children: ReactNode }) {
           className="absolute top-3 left-1/2 -translate-x-1/2 bg-black rounded-full z-20"
           style={{ width: 126, height: 37 }}
         />
-        {/* Status bar */}
-        <div
-          dir="ltr"
-          className="absolute top-0 left-0 right-0 flex items-end justify-between px-7 z-10"
-          style={{ height: 59, paddingBottom: 11 }}
-        >
-          
-         
-         
-        </div>
-
-        {/* Scrollable page content, page controls its own top padding under status bar */}
+        {/* Scrollable page content, page controls its own top padding */}
         <div className="absolute inset-0 overflow-y-auto">{children}</div>
 
         {/* Home indicator */}

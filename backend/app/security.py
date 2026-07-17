@@ -1,5 +1,7 @@
 import hashlib
 from datetime import datetime
+from typing import List, Optional
+from pydantic import BaseModel, Field
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
@@ -118,3 +120,90 @@ def verify_chain(
         expected_prev = log.hash
 
     return {"valid": True, "entries_checked": len(logs)}
+
+
+class TransactionAnalysisRequest(BaseModel):
+    amount: float = Field(..., gt=0)
+    date: str = Field(...)
+    time: str = Field(...)
+    location: str = Field(...)
+    device: str = Field(...)
+    type: str = Field(...)
+
+
+class SecurityLogResponse(BaseModel):
+    id: int
+    event_type: str
+    details: str
+    prev_hash: str
+    hash: str
+    timestamp: datetime
+
+
+@router.get("/last-transaction", response_model=Optional[SecurityLogResponse])
+def last_transaction(
+    db: Session = Depends(get_db),
+    current_user: db_models.User = Depends(get_current_user),
+):
+    last_entry = (
+        db.query(db_models.SecurityLog)
+        .filter(db_models.SecurityLog.user_id == current_user.id)
+        .order_by(db_models.SecurityLog.id.desc())
+        .first()
+    )
+    if not last_entry:
+        return None
+
+    return SecurityLogResponse(
+        id=last_entry.id,
+        event_type=last_entry.event_type,
+        details=last_entry.details,
+        prev_hash=last_entry.prev_hash,
+        hash=last_entry.hash,
+        timestamp=last_entry.timestamp,
+    )
+
+
+@router.get("/blockchain-log", response_model=List[SecurityLogResponse])
+def blockchain_log(
+    db: Session = Depends(get_db),
+    current_user: db_models.User = Depends(get_current_user),
+):
+    logs = (
+        db.query(db_models.SecurityLog)
+        .filter(db_models.SecurityLog.user_id == current_user.id)
+        .order_by(db_models.SecurityLog.id.asc())
+        .all()
+    )
+    return [
+        SecurityLogResponse(
+            id=log.id,
+            event_type=log.event_type,
+            details=log.details,
+            prev_hash=log.prev_hash,
+            hash=log.hash,
+            timestamp=log.timestamp,
+        )
+        for log in logs
+    ]
+
+
+@router.post("/analyze-transaction", response_model=SecurityLogResponse)
+def analyze_transaction(
+    payload: TransactionAnalysisRequest,
+    db: Session = Depends(get_db),
+    current_user: db_models.User = Depends(get_current_user),
+):
+    details = (
+        f"عملية مشبوهة: {payload.type}، المبلغ {payload.amount:.0f} ر.س، "
+        f"التاريخ {payload.date}، الوقت {payload.time}، الموقع {payload.location}، الجهاز {payload.device}"
+    )
+    entry = log_security_event(db, current_user.id, "suspicious_transaction", details)
+    return SecurityLogResponse(
+        id=entry.id,
+        event_type=entry.event_type,
+        details=entry.details,
+        prev_hash=entry.prev_hash,
+        hash=entry.hash,
+        timestamp=entry.timestamp,
+    )

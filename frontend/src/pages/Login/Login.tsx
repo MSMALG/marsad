@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import logo from "../../assets/logo.png";
+import { api } from "../../api/client";
 
 export default function Login({ onLogin }: { onLogin: () => void }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -8,6 +9,26 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const [error, setError] = useState<string | null>(null);
+const [loading, setLoading] = useState(false);
+
+async function handleLogin() {
+  setError(null);
+  setLoading(true);
+  try {
+    const response = await api.post("/auth/login", {
+      email: username,
+      password,
+    });
+
+    localStorage.setItem("token", response.data.access_token);
+    onLogin();
+  } catch (err: any) {
+    setError(err.message || "حدث خطأ");
+  } finally {
+    setLoading(false);
+  }
+}
   return (
     <>
       <style>{`
@@ -243,7 +264,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
 
           <button
             className="login-btn"
-            onClick={onLogin}
+            onClick={handleLogin} disabled={loading}
             style={{
               width: "100%", height: "56px",
               background: "linear-gradient(135deg, #4A5E4D 0%, #37463A 100%)",

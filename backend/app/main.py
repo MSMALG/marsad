@@ -13,15 +13,19 @@ from cheaper_alternative import router as cheaper_alternative_router
 from rewards import router as rewards_router
 from security import router as security_router
 from travel import router as travel_router
+from AIChat import router as chat_router
 
-# Creates marsad.db and all tables on first run if they don't exist yet
+# Creates marsad.db and all tables on first run if they don't exist yet.
+# NOTE: this does NOT add new columns to an already-existing table — if you
+# had a marsad.db from before this merge, delete it once so the new Wallet
+# columns (icon_key, subtitle, allocations, etc.) get created fresh.
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Marsad API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -43,3 +47,16 @@ app.include_router(cheaper_alternative_router)
 app.include_router(rewards_router)
 app.include_router(security_router)
 app.include_router(travel_router)
+app.include_router(chat_router)
+
+# --- Dropped in this merge (per agreed strategy) ---
+# blockchain.py / smart_contract.py and their routes below were removed in
+# favor of the per-user, DB-backed hash chain in security.py:
+#   POST /analyze-transaction, /report-transaction  -> superseded by whatever
+#       endpoint your DB-backed fraud detection lives at (wire this up if
+#       AIChat.py or the frontend still needs a "check this transaction" call)
+#   GET  /last-transaction, /blockchain-log          -> superseded by
+#       GET /security/logs and GET /security/verify
+#
+# Update frontend/src/components/SecurityAlert.tsx and
+# frontend/src/components/BlockchainRecords.tsx to call /security/* instead.

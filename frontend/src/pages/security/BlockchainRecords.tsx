@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { api } from "../../api/client";
 import { C, F } from "./constants";
 
 import {
@@ -7,15 +9,19 @@ import {
   Lock,
 } from "lucide-react";
 
-const blockchainRecords = [
-  { amount: "5,000 ر.س", date: "08 يوليو 2026", time: "03:00 ص", hash: "a3f9b2c1e87d4fd8b6e2..." },
-  { amount: "2,300 ر.س", date: "21 يونيو 2026", time: "11:45 م", hash: "7c4d9e0f2a1b8c3d5e6f..." },
-  { amount: "8,750 ر.س", date: "03 يونيو 2026", time: "02:17 ص", hash: "f1e2d3c4b5a6978869ab..." },
-  { amount: "1,200 ر.س", date: "14 مايو 2026", time: "08:30 م", hash: "9b8c7d6e5f4a3b2c1d0e..." },
-  { amount: "4,500 ر.س", date: "29 أبريل 2026", time: "01:55 ص", hash: "2e3f4a5b6c7d8e9f0a1b..." },
-];
-
 export default function BlockchainRecords({ onBack }: { onBack: () => void }) {
+
+  const [records, setRecords] = useState<any[]>([]);
+
+  useEffect(() => {
+    api
+      .get("/security/logs")
+      .then((res) => {
+        setRecords(res.data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <div
       style={{
@@ -71,8 +77,12 @@ export default function BlockchainRecords({ onBack }: { onBack: () => void }) {
       </div>
 
       {/* Records */}
-      <div style={{ padding: "0 16px", display: "flex", flexDirection: "column", gap: 7, flexShrink: 0 }} dir="rtl">
-        {blockchainRecords.map((rec, i) => (
+      <div style={{ padding: "0 16px", display: "flex", 
+        flexDirection: "column", gap: 7, flexShrink: 0 }} dir="rtl">
+          <p style={{ color: "red" }}>
+  عدد السجلات: {records.length}
+</p>
+        {records.map((rec, i) => (
           <div key={i} style={{
             background: C.card, borderRadius: 16, padding: "10px 14px",
             boxShadow: "0 2px 10px rgba(0,0,0,0.05)", border: `1px solid ${C.border}`,
@@ -86,10 +96,13 @@ export default function BlockchainRecords({ onBack }: { onBack: () => void }) {
 
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 2 }}>
-                <div style={{ fontSize: 10, color: C.muted, fontFamily: F }}>{rec.date} · {rec.time}</div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: C.text, fontFamily: F }}>{rec.amount}</div>
+                <div style={{ fontSize: 10, color: C.muted, fontFamily: F }}>{rec.timestamp} </div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: C.text, fontFamily: F }}>{rec.event_type === "suspicious_transaction" ? "عملية مشبوهة" : rec.event_type}</div>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ fontSize: 11, color: C.text, fontFamily: F, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 240 }}>
+                  {rec.details}
+                </div>
                 <div style={{ fontSize: 9.5, color: C.secondary, fontFamily: "'JetBrains Mono', monospace", letterSpacing: 0.3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 160 }}>
                   {rec.hash}
                 </div>

@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, JSON
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -18,7 +18,6 @@ class User(Base):
     expenses = relationship("Expense", back_populates="owner")
     wallets = relationship("Wallet", back_populates="owner")
     rewards = relationship("RewardAccount", back_populates="owner")
-
 
 
 class Expense(Base):
@@ -41,8 +40,18 @@ class Wallet(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     name = Column(String, nullable=False)
-    goal_amount = Column(Float, nullable=False)
-    saved_amount = Column(Float, default=0.0)
+
+    icon_key = Column(String, default="custom")        # travel / wedding / car / house / emergency_fund / custom
+    subtitle = Column(String, nullable=True)            # e.g. "اليابان • 6 أشهر"
+    currency = Column(String, default="SAR")
+    monthly_target = Column(Float, nullable=True)
+    start_date = Column(DateTime, default=datetime.utcnow)
+    remaining_months = Column(Integer, nullable=True)
+    allocations = Column(JSON, nullable=True)            # list[{category, amount, percentage, rationale}]
+    summary = Column(String, nullable=True)
+
+    goal_amount = Column(Float, nullable=False)          # == target_amount
+    saved_amount = Column(Float, default=0.0)            # == saved
     target_date = Column(DateTime, nullable=True)
 
     owner = relationship("User", back_populates="wallets")
@@ -56,9 +65,6 @@ class RewardAccount(Base):
     points = Column(Integer, default=0)
 
     owner = relationship("User", back_populates="rewards")
-
-
-import hashlib
 
 
 class SecurityLog(Base):

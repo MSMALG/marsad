@@ -1,7 +1,23 @@
-import { Home, PieChart, Plane, Grid3x3, PlusCircle } from "lucide-react";
 
-type PageKey = "dashboard" | "expenses" | "wallets" | "cheaper-alternative" | "security" | "travel";
-
+import {
+  Home,
+  PieChart,
+  Plane,
+  Grid3x3,
+  PlusCircle,
+  ChartColumn,
+} from "lucide-react";
+type PageKey =
+  | "dashboard"
+  | "expenses"
+  | "investment"
+  | "wallets"
+  | "wallet-detail"
+  | "wallet-generator"
+  | "ai-chat"
+  | "cheaper-alternative"
+  | "security"
+  | "travel";
 export default function BottomNav({
   active,
   onNavigate,
@@ -14,7 +30,9 @@ export default function BottomNav({
     { key: "expenses", label: "المصروفات", icon: PieChart },
     { key: "travel", label: "السفر", icon: Plane },
     { key: "security", label: "المزيد", icon: Grid3x3 },
+    { key: "investment", label: "الاستثمار", icon: ChartColumn },
   ];
+  
 
   return (
     <div

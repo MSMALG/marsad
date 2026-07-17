@@ -100,6 +100,24 @@ def get_alerts(
                 "التفاصيل": f"لقد صرفت {amount:.0f} ريال على {merchant} هذا الشهر، جرّب بدائل أقل تكلفة.",
             })
 
+    # Show a security warning card when a suspicious transaction was logged.
+    suspicious_log = (
+        db.query(db_models.SecurityLog)
+        .filter(
+            db_models.SecurityLog.user_id == current_user.id,
+            db_models.SecurityLog.event_type == "suspicious_transaction",
+        )
+        .order_by(db_models.SecurityLog.id.desc())
+        .first()
+    )
+
+    if suspicious_log:
+        alerts.insert(0, {
+            "النوع": "تنبيه أمني",
+            "العنوان": "تم اكتشاف عملية مشبوهة",
+            "التفاصيل": suspicious_log.details,
+        })
+
     if not alerts:
         alerts.append({
             "النوع": "تنبيه إيجابي",
