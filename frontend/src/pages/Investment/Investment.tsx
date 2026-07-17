@@ -7,26 +7,7 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
-
-// 31 days: June 30 → July 30
-const generateChartData = () => {
-  const points = 31;
-  return Array.from({ length: points }, (_, i) => {
-    const trend = (i / (points - 1)) * 850;
-    const wave = Math.sin(i * 0.55) * 110 + Math.cos(i * 0.35) * 70;
-    const value = Math.round(10000 + trend + wave);
-    const tickLabels: Record<number, string> = {
-      0: "30 يونيو",
-      7: "7 يوليو",
-      14: "14 يوليو",
-      21: "21 يوليو",
-      30: "30 يوليو",
-    };
-    return { day: i, value, label: tickLabels[i] ?? "" };
-  });
-};
-
-const chartData = generateChartData();
+import type { PortfolioItem, Transaction } from "../../app/App";
 
 const CustomXTick = ({ x, y, payload }: any) => {
   if (!payload.value) return null;
@@ -115,7 +96,37 @@ function AlinmaMark() {
   );
 }
 
-export default function Investment() {
+// ── تنسيق الأرقام (نفس أسلوب صديقك) ──
+const fmtNum = (n: number) => Math.round(n).toLocaleString("en-US");
+
+// ⬇️⬇️⬇️ الأرقام كلها الحين تجي جاهزة من App.tsx بدل ما تكون ثابتة هنا ⬇️⬇️⬇️
+type Props = {
+  onStartSimulation: () => void;
+  onOpenDetails: () => void;
+  initialBalance: number;
+  currentValue: number;
+  profit: number;
+  profitPct: number;
+  isProfit: boolean;
+  tradesCount: number;
+  rangeHigh: number;
+  rangeLow: number;
+  chartData: { day: number; value: number; label: string }[];
+};
+
+export default function Investment({
+  onStartSimulation,
+  onOpenDetails,
+  initialBalance,
+  currentValue,
+  profit,
+  profitPct,
+  isProfit,
+  tradesCount,
+  rangeHigh,
+  rangeLow,
+  chartData,
+}: Props) {
   return (
     <div
       style={{
@@ -169,6 +180,7 @@ export default function Investment() {
             </div>
           </div>
           <button
+            onClick={onStartSimulation}
             style={{
               width: "100%",
               marginTop: 12,
@@ -187,7 +199,7 @@ export default function Investment() {
           </button>
         </div>
 
-        {/* Card 2 — Current simulation */}
+        {/* Card 2 — Current simulation (بيانات حقيقية) */}
         <div
           style={{
             background: "white",
@@ -249,7 +261,7 @@ export default function Investment() {
               </div>
             </div>
 
-            {/* Stats row */}
+            {/* Stats row — القيم الحين حقيقية */}
             <div
               style={{
                 display: "grid",
@@ -260,23 +272,27 @@ export default function Investment() {
               }}
             >
               <div style={{ textAlign: "center" }}>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#43674F", margin: 0 }}>10,000</p>
+                <p style={{ fontSize: 11, fontWeight: 700, color: "#43674F", margin: 0 }}>{fmtNum(initialBalance)}</p>
                 <p style={{ fontSize: 9, color: "#9a9a8a", margin: "1px 0 0" }}>ر.س</p>
                 <p style={{ fontSize: 9, color: "#9a9a8a", margin: "2px 0 0" }}>الرصيد الابتدائي</p>
               </div>
               <div style={{ textAlign: "center" }}>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#43674F", margin: 0 }}>10,850</p>
+                <p style={{ fontSize: 11, fontWeight: 700, color: "#43674F", margin: 0 }}>{fmtNum(currentValue)}</p>
                 <p style={{ fontSize: 9, color: "#9a9a8a", margin: "1px 0 0" }}>ر.س</p>
                 <p style={{ fontSize: 9, color: "#9a9a8a", margin: "2px 0 0" }}>القيمة الحالية</p>
               </div>
               <div style={{ textAlign: "center" }}>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#16a34a", margin: 0 }}>+850</p>
-                <p style={{ fontSize: 9, color: "#16a34a", margin: "1px 0 0" }}>(+8.5%)</p>
-                <p style={{ fontSize: 9, color: "#9a9a8a", margin: "2px 0 0" }}>الربح</p>
+                <p style={{ fontSize: 11, fontWeight: 700, color: isProfit ? "#16a34a" : "#dc2626", margin: 0 }}>
+                  {isProfit ? "+" : "−"}{fmtNum(Math.abs(profit))}
+                </p>
+                <p style={{ fontSize: 9, color: isProfit ? "#16a34a" : "#dc2626", margin: "1px 0 0" }}>
+                  ({isProfit ? "+" : "−"}{Math.abs(profitPct).toFixed(1)}%)
+                </p>
+                <p style={{ fontSize: 9, color: "#9a9a8a", margin: "2px 0 0" }}>{isProfit ? "الربح" : "الخسارة"}</p>
               </div>
             </div>
 
-            {/* Chart */}
+            {/* Chart — بيانات حقيقية من سجل قيمة المحفظة */}
             <div style={{ height: 80, marginLeft: -4, marginRight: -4 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData} margin={{ top: 4, right: 6, bottom: 18, left: 6 }}>
@@ -302,6 +318,7 @@ export default function Investment() {
           </div>
 
           <button
+            onClick={onOpenDetails}
             style={{
               width: "100%",
               padding: "9px 0",
@@ -319,7 +336,7 @@ export default function Investment() {
           </button>
         </div>
 
-        {/* Card 3 — Performance stats */}
+        {/* Card 3 — Performance stats (بيانات حقيقية) */}
         <div
           style={{
             background: "white",
@@ -333,9 +350,9 @@ export default function Investment() {
           </p>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
             {[
-              { val: "7", unit: "", label: "عدد الصفقات", color: "#43674F", large: true },
-              { val: "11,020", unit: "ر.س", label: "أعلى قيمة وصلت لها", color: "#43674F", large: false },
-              { val: "9,720", unit: "ر.س", label: "أقل قيمة وصلت لها", color: "#888", large: false },
+              { val: String(tradesCount), unit: "", label: "عدد الصفقات", color: "#43674F", large: true },
+              { val: fmtNum(rangeHigh), unit: "ر.س", label: "أعلى قيمة وصلت لها", color: "#43674F", large: false },
+              { val: fmtNum(rangeLow), unit: "ر.س", label: "أقل قيمة وصلت لها", color: "#888", large: false },
             ].map((stat, i) => (
               <div key={i} style={{ background: "#F6F1E8", borderRadius: 14, padding: "8px 6px", textAlign: "center" }}>
                 <p style={{ fontSize: stat.large ? 18 : 11, fontWeight: 800, color: stat.color, margin: 0 }}>

@@ -12,10 +12,12 @@ type PageKey =
   | "expenses"
   | "investment"
   | "wallets"
+  | "wallet-detail"
+  | "wallet-generator"
+  | "ai-chat"
   | "cheaper-alternative"
   | "security"
   | "travel";
-
 export default function BottomNav({
   active,
   onNavigate,
