@@ -37,7 +37,13 @@ type AlertData = {
   العنوان: string;
   التفاصيل: string;
 };
-
+type BudgetData = {
+  الرصيد_الحالي: number;
+  التوفير_هذا_الشهر: number;
+  المتوقع_نهاية_الشهر: number;
+  هدف_الميزانية: number;
+  عدد_الأيام_الملتزم_بها: number;
+};
 const WALLET_COLORS = ["#43674F", "#7FA6A1", "#C9B57A", "#4F7C5B"];
 const WALLET_ICONS = [Diamond, Plane, Diamond, Plane];
 
@@ -45,12 +51,26 @@ export default function Dashboard() {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
   const [wallets, setWallets] = useState<WalletData[] | null>(null);
   const [alerts, setAlerts] = useState<AlertData[] | null>(null);
+  const [budget, setBudget] = useState<BudgetData | null>(null);
 
   useEffect(() => {
-    api.get("/dashboard").then((res) => setDashboard(res.data)).catch(console.error);
-    api.get("/wallets").then((res) => setWallets(res.data)).catch(console.error);
-    api.get("/alerts").then((res) => setAlerts(res.data)).catch(console.error);
-  }, []);
+  api.get("/dashboard")
+    .then((res) => setDashboard(res.data))
+    .catch(console.error);
+
+  api.get("/wallets")
+    .then((res) => setWallets(res.data))
+    .catch(console.error);
+
+  api.get("/alerts")
+    .then((res) => setAlerts(res.data))
+    .catch(console.error);
+
+  api.get("/budget")
+    .then((res) => setBudget(res.data))
+    .catch(console.error);
+
+}, []);
 
   if (!dashboard) {
     return (
@@ -130,15 +150,15 @@ export default function Dashboard() {
             <Target size={14} color="#2F3E34" />
           </div>
           <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px', marginBottom: 5 }}>
-            ملتزمة بميزانيتك 78%
+            ملتزمة بميزانيتك ملتزمة بميزانيتك {budget?.هدف_الميزانية ?? 0}%
           </p>
           <div className="w-full bg-gray-200 rounded-full" style={{ height: 5, marginBottom: 5 }}>
-            <div className="bg-[#2F3E34] rounded-full" style={{ height: 5, width: '78%' }} />
+            <div className="bg-[#2F3E34] rounded-full" style={{ height: 5, width: `${budget?.هدف_الميزانية ?? 0}%` }} />
           </div>
           <div className="flex items-center" style={{ gap: 5 }}>
             <Flame size={11} color="#C9B57A" />
             <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>
-              12 يوم متتالي
+              {budget?.عدد_الأيام_الملتزم_بها ?? 0} يوم متتالي 
             </p>
           </div>
         </div>
