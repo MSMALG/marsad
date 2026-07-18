@@ -23,7 +23,7 @@ from fastapi.responses import StreamingResponse
 
 from schemas import ChatRequest
 
-load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "..", ".env"))
 
 router = APIRouter()
 
@@ -56,9 +56,33 @@ def _build_system_prompt(wallets: list[dict]) -> str:
 - خلي ردودك مختصرة ومركزة (3-5 جمل عادة)، إلا لو طلب المستخدم تفصيل أكثر"""
 
 
+def _build_fallback_reply(messages: list[dict], wallets: list[dict]) -> str:
+    last_user_message = ""
+    for message in reversed(messages):
+        if message.get("role") == "user":
+            last_user_message = message.get("content", "")
+            break
+
+    wallet_hint = ""
+    if wallets:
+        wallet_names = ", ".join(w.get("name", "محفظة") for w in wallets[:3])
+        wallet_hint = f"أرى أن لديك الآن {wallet_names}."
+
+    if not last_user_message:
+        return "مرحبًا! أنا مرصاد، وسأساعدك في تخطيط الادخار والإنفاق. جرّبي سؤالًا بسيطًا مثل: كيف أوزع ميزانيتي بين محفظاتي؟"
+
+    return (
+        f"أفهم أنك تسأل عن: {last_user_message}. "
+        f"{wallet_hint} "
+        "في الوقت الحالي، أنا أعمل في وضع الاستجابة المحلية لأن خدمة Claude غير متاحة، لكنني أقدر أقدم لك نصيحة عملية الآن: "
+        "قسّم دخلك إلى 50% احتياجات، 30% أهداف، و20% إنفاق مرن، ثم راقب أول 3 محفظات لديك بانتظام."
+    )
+
+
 async def _stream_claude_response(messages: list[dict], wallets: list[dict]):
     if not ANTHROPIC_API_KEY:
-        yield f"data: {json.dumps({'error': 'ANTHROPIC_API_KEY is not configured on the server'})}\n\n"
+        yield f"data: {json.dumps({'text': _build_fallback_reply(messages, wallets)}, ensure_ascii=False)}\n\n"
+        yield "data: [DONE]\n\n"
         return
 
     payload = {
@@ -79,7 +103,14 @@ async def _stream_claude_response(messages: list[dict], wallets: list[dict]):
             async with client.stream("POST", ANTHROPIC_API_URL, headers=headers, json=payload) as response:
                 if response.status_code != 200:
                     error_text = await response.aread()
-                    yield f"data: {json.dumps({'error': error_text.decode()})}\n\n"
+                    detail = error_text.decode()
+                    try:
+                        payload_detail = json.loads(detail)
+                        if isinstance(payload_detail, dict):
+                            detail = payload_detail.get("error", {}).get("message") or payload_detail.get("detail") or detail
+                    except Exception:
+                        pass
+                    yield f"data: {json.dumps({'text': _build_fallback_reply(messages, wallets) + f' (ملاحظة: {detail})'}, ensure_ascii=False)}\n\n"
                     return
 
                 async for line in response.aiter_lines():
@@ -99,8 +130,10 @@ async def _stream_claude_response(messages: list[dict], wallets: list[dict]):
                             text = delta.get("text", "")
                             yield f"data: {json.dumps({'text': text}, ensure_ascii=False)}\n\n"
 
-    except httpx.RequestError as e:
-        yield f"data: {json.dumps({'error': f'Could not reach Anthropic API: {str(e)}'})}\n\n"
+    except httpx.RequestError:
+        yield f"data: {json.dumps({'text': _build_fallback_reply(messages, wallets)}, ensure_ascii=False)}\n\n"
+    except Exception as e:
+        yield f"data: {json.dumps({'text': _build_fallback_reply(messages, wallets)}, ensure_ascii=False)}\n\n"
 
     yield "data: [DONE]\n\n"
 

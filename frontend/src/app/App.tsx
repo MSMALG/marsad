@@ -60,7 +60,15 @@ const DEFAULT_COUNTRY: Country = {
 };
 
 export default function App() {
-  const [page, setPage] = useState<Page>("login");
+  const [page, setPage] = useState<Page>(() => {
+    if (typeof window !== "undefined") {
+      const savedToken = window.localStorage.getItem("token");
+      if (savedToken) {
+        return "dashboard";
+      }
+    }
+    return "login";
+  });
   const [selectedWalletId, setSelectedWalletId] = useState<number | undefined>(undefined);
 
   const [travelScreen, setTravelScreen] = useState<Screen>("travel");

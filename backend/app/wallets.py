@@ -32,7 +32,7 @@ import db_models
 from auth import get_current_user
 from schemas import WalletGenerateRequest, WalletDetail, WalletAllocationDetail
 
-load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "..", ".env"))
 
 router = APIRouter(prefix="/wallets", tags=["wallets"])
 
@@ -239,6 +239,19 @@ def _extract_json(text: str) -> dict:
     return json.loads(cleaned)
 
 
+def _build_local_fallback_plan(request: WalletGenerateRequest) -> tuple[list[dict], str]:
+    monthly_budget = float(request.monthly_budget)
+    allocations = [
+        {"category": "الاحتياجات الأساسية", "amount": round(monthly_budget * 0.5, 2), "percentage": 50, "rationale": "تخصيص أولوي لاحتياجاتك الأساسية قبل الأهداف."},
+        {"category": "الأهداف المستقبلية", "amount": round(monthly_budget * 0.3, 2), "percentage": 30, "rationale": "موارد مخصصة لتطوير هدفك تدريجيًا دون ضغط مالي."},
+        {"category": "المرونة والطارئ", "amount": round(monthly_budget * 0.2, 2), "percentage": 20, "rationale": "احتياطي بسيط يغطي التغيرات غير المتوقعة."},
+    ]
+    # Keep the numbers aligned to the monthly budget exactly.
+    allocations[-1]["amount"] = round(monthly_budget - sum(a["amount"] for a in allocations[:-1]), 2)
+    summary = "تم إعداد خطة محلية مؤقتة بناءً على هدفك المتاح، وهي مناسبة للاستخدام حتى تعود خدمة Claude بشكل طبيعي."
+    return allocations, summary
+
+
 @router.post("/generate", response_model=WalletDetail)
 async def generate_wallet(
     request: WalletGenerateRequest,
@@ -246,7 +259,26 @@ async def generate_wallet(
     current_user: db_models.User = Depends(get_current_user),
 ):
     if not ANTHROPIC_API_KEY:
-        raise HTTPException(status_code=500, detail="ANTHROPIC_API_KEY is not configured on the server (.env)")
+        allocations, summary = _build_local_fallback_plan(request)
+        wallet = db_models.Wallet(
+            user_id=current_user.id,
+            name=f"محفظة {ICON_LABELS.get(request.goal_type, 'هدف')}",
+            icon_key=request.goal_type,
+            subtitle=request.goal_description[:24] if request.goal_description else request.currency,
+            currency=request.currency,
+            goal_amount=request.target_amount,
+            saved_amount=0.0,
+            monthly_target=request.monthly_budget,
+            start_date=datetime.utcnow(),
+            target_date=datetime.utcnow() + timedelta(days=30 * (request.timeframe_months or 1)),
+            remaining_months=request.timeframe_months,
+            allocations=allocations,
+            summary=summary,
+        )
+        db.add(wallet)
+        db.commit()
+        db.refresh(wallet)
+        return _to_response(wallet)
 
     payload = {
         "model": ANTHROPIC_MODEL,
@@ -268,10 +300,27 @@ async def generate_wallet(
         try:
             response = await client.post(ANTHROPIC_API_URL, headers=headers, json=payload)
             response.raise_for_status()
-        except httpx.HTTPStatusError as e:
-            raise HTTPException(status_code=502, detail=f"Anthropic API error: {e.response.text}")
-        except httpx.RequestError as e:
-            raise HTTPException(status_code=502, detail=f"Could not reach Anthropic API: {str(e)}")
+        except (httpx.HTTPStatusError, httpx.RequestError):
+            allocations, summary = _build_local_fallback_plan(request)
+            wallet = db_models.Wallet(
+                user_id=current_user.id,
+                name=f"محفظة {ICON_LABELS.get(request.goal_type, 'هدف')}",
+                icon_key=request.goal_type,
+                subtitle=request.goal_description[:24] if request.goal_description else request.currency,
+                currency=request.currency,
+                goal_amount=request.target_amount,
+                saved_amount=0.0,
+                monthly_target=request.monthly_budget,
+                start_date=datetime.utcnow(),
+                target_date=datetime.utcnow() + timedelta(days=30 * (request.timeframe_months or 1)),
+                remaining_months=request.timeframe_months,
+                allocations=allocations,
+                summary=summary,
+            )
+            db.add(wallet)
+            db.commit()
+            db.refresh(wallet)
+            return _to_response(wallet)
 
     data = response.json()
     text_parts = [block["text"] for block in data.get("content", []) if block.get("type") == "text"]

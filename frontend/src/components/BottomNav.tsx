@@ -29,8 +29,8 @@ export default function BottomNav({
     { key: "dashboard", label: "الرئيسية", icon: Home },
     { key: "expenses", label: "المصروفات", icon: PieChart },
     { key: "travel", label: "السفر", icon: Plane },
-    { key: "security", label: "المزيد", icon: Grid3x3 },
     { key: "investment", label: "الاستثمار", icon: ChartColumn },
+    { key: "security", label: "المزيد", icon: Grid3x3 },
   ];
   
 

@@ -24,6 +24,7 @@ type DashboardData = {
   savings: number;
   risk: string;
   recommendation: string;
+  predicted_monthly_expenses?: number | null;
 };
 
 type WalletData = {
@@ -84,24 +85,85 @@ export default function Dashboard({ onNavigate, onOpenWallet }: Props) {
   const [wallets, setWallets] = useState<WalletData[] | null>(null);
   const [alerts, setAlerts] = useState<AlertData[] | null>(null);
   const [budget, setBudget] = useState<BudgetData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    api.get("/dashboard").then((res) => setDashboard(res.data)).catch(console.error);
-    api.get("/wallets").then((res) => setWallets(res.data)).catch(console.error);
-    api.get("/alerts").then((res) => setAlerts(res.data)).catch(console.error);
-    api.get("/budget").then((res) => setBudget(res.data)).catch(console.error);
+    let cancelled = false;
+
+    const loadDashboardData = async () => {
+      setLoading(true);
+      setError(null);
+
+      const [dashboardRes, walletsRes, alertsRes, budgetRes] = await Promise.allSettled([
+        api.get("/dashboard"),
+        api.get("/wallets"),
+        api.get("/alerts"),
+        api.get("/budget"),
+      ]);
+
+      if (cancelled) return;
+
+      if (dashboardRes.status === "fulfilled") {
+        setDashboard(dashboardRes.value.data);
+      } else {
+        setDashboard(null);
+        setError("تعذر تحميل لوحة التحكم. يرجى تسجيل الدخول مرة أخرى.");
+      }
+
+      if (walletsRes.status === "fulfilled") {
+        setWallets(walletsRes.value.data);
+      } else {
+        setWallets([]);
+      }
+
+      if (alertsRes.status === "fulfilled") {
+        setAlerts(alertsRes.value.data);
+      } else {
+        setAlerts([]);
+      }
+
+      if (budgetRes.status === "fulfilled") {
+        setBudget(budgetRes.value.data);
+      } else {
+        setBudget(null);
+      }
+
+      setLoading(false);
+    };
+
+    void loadDashboardData();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  if (!dashboard) {
+  if (loading) {
     return (
       <div className="absolute inset-0 flex items-center justify-center" style={{ paddingTop: 64 }}>
-        Loading...
+        جارِ تحميل لوحة التحكم...
       </div>
     );
   }
 
-  const budgetAlert = alerts?.find((a) => a.النوع === "تنبيه الميزانية");
-  const securityAlert = alerts?.find((a) => a.النوع === "تنبيه أمني");
+  if (error || !dashboard) {
+    return (
+      <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center" style={{ paddingTop: 64 }}>
+        <p style={{ fontFamily: "Cairo, sans-serif", color: "#333333", fontSize: 13, marginBottom: 10 }}>
+          {error ?? "لم يتم العثور على بيانات اللوحة الحالية."}
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="bg-[#2F3E34] text-white"
+          style={{ borderRadius: 10, padding: "8px 14px", fontFamily: "Tajawal, sans-serif" }}
+        >
+          إعادة المحاولة
+        </button>
+      </div>
+    );
+  }
+
+  const visibleAlerts = alerts?.slice(0, 3) ?? [];
 
   return (
     <div className="absolute inset-0 overflow-y-auto" dir="rtl" style={{ paddingTop: 64, paddingBottom: 90 }}>
@@ -180,6 +242,26 @@ export default function Dashboard({ onNavigate, onOpenWallet }: Props) {
         </div>
       </div>
 
+      {/* AI Prediction Card */}
+      {dashboard.predicted_monthly_expenses !== undefined && dashboard.predicted_monthly_expenses !== null && (
+        <div className="px-5" style={{ marginBottom: 7 }}>
+          <div className="bg-[#F2EDE2]" style={{ borderRadius: 18, padding: '10px 12px' }}>
+            <div className="flex items-center justify-between" style={{ marginBottom: 4 }}>
+              <h3 className="font-bold" style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#333333', fontSize: 12 }}>
+                توقعات المرصاد
+              </h3>
+              <Target size={14} color="#43674F" />
+            </div>
+            <p style={{ fontFamily: 'readex-pro-vf, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px', marginBottom: 4 }}>
+              التنبؤ بالإنفاق الشهري بناءً على سلوكك المالي
+            </p>
+            <p className="font-bold" style={{ fontFamily: 'tarif-arabic, sans-serif', color: '#2F3E34', fontSize: 15, lineHeight: '19px' }}>
+              {dashboard.predicted_monthly_expenses.toLocaleString()} ر.س
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Budget Goal Card */}
       <div className="px-5" style={{ marginBottom: 7 }}>
         <div className="bg-white" style={{ borderRadius: 18, padding: '9px 12px' }}>
@@ -202,67 +284,49 @@ export default function Dashboard({ onNavigate, onOpenWallet }: Props) {
         </div>
       </div>
 
-      {/* Budget Warning Card */}
-      {budgetAlert && (
+      {/* Alerts */}
+      {visibleAlerts.length > 0 && (
         <div className="px-5" style={{ marginBottom: 7 }}>
-          <div
-            className="bg-[#FFF9E6] border-r-[3px] border-[#C9B57A]"
-            style={{ borderRadius: 18, padding: '8px 12px' }}
-          >
-            <div className="flex items-center" style={{ gap: 8, marginBottom: 6 }}>
-              <AlertTriangle size={14} color="#C9B57A" className="shrink-0" />
-              <div className="flex-1">
-                <h4
-                  className="font-bold"
-                  style={{ fontFamily: 'Tajawal, sans-serif', color: '#333333', fontSize: 11, lineHeight: '15px', marginBottom: 1 }}
-                >
-                  {budgetAlert.العنوان}
-                </h4>
-                <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>
-                  {budgetAlert.التفاصيل}
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => onNavigate("cheaper-alternative")}
-              className="bg-[#C9B57A] text-white font-medium"
-              style={{ fontFamily: 'readex-pro-vf, sans-serif', fontSize: 10, borderRadius: 8, padding: '4px 12px' }}
-            >
-              شوفي البديل
-            </button>
-          </div>
-        </div>
-      )}
+          {visibleAlerts.map((alert, index) => {
+            const isSecurity = alert.النوع === "تنبيه أمني";
+            const isBudget = alert.النوع === "تنبيه الميزانية";
+            const accentColor = isSecurity ? "#8B2020" : isBudget ? "#C9B57A" : "#43674F";
+            const cardClass = isSecurity ? "bg-[#FFF0F0] border-r-[3px] border-[#8B2020]" : isBudget ? "bg-[#FFF9E6] border-r-[3px] border-[#C9B57A]" : "bg-[#F2F8F4] border-r-[3px] border-[#43674F]";
+            const Icon = isSecurity ? Shield : isBudget ? AlertTriangle : Bell;
 
-      {/* Security Alert Card */}
-      {securityAlert && (
-        <div className="px-5" style={{ marginBottom: 7 }}>
-          <div
-            className="bg-[#FFF0F0] border-r-[3px] border-[#8B2020]"
-            style={{ borderRadius: 18, padding: '8px 12px' }}
-          >
-            <div className="flex items-center" style={{ gap: 8, marginBottom: 6 }}>
-              <Shield size={14} color="#8B2020" className="shrink-0" />
-              <div className="flex-1">
-                <h4
-                  className="font-bold"
-                  style={{ fontFamily: 'Tajawal, sans-serif', color: '#8B2020', fontSize: 11, lineHeight: '15px', marginBottom: 1 }}
-                >
-                  {securityAlert.العنوان}
-                </h4>
-                <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>
-                  {securityAlert.التفاصيل}
-                </p>
+            return (
+              <div key={`${alert.العنوان}-${index}`} className={`${cardClass}`} style={{ borderRadius: 18, padding: '8px 12px', marginBottom: index < visibleAlerts.length - 1 ? 7 : 0 }}>
+                <div className="flex items-center" style={{ gap: 8, marginBottom: 6 }}>
+                  <Icon size={14} color={accentColor} className="shrink-0" />
+                  <div className="flex-1">
+                    <h4 className="font-bold" style={{ fontFamily: 'Tajawal, sans-serif', color: '#333333', fontSize: 11, lineHeight: '15px', marginBottom: 1 }}>
+                      {alert.العنوان}
+                    </h4>
+                    <p style={{ fontFamily: 'Cairo, sans-serif', color: '#666666', fontSize: 10, lineHeight: '14px' }}>
+                      {alert.التفاصيل}
+                    </p>
+                  </div>
+                </div>
+                {isBudget ? (
+                  <button
+                    onClick={() => onNavigate("cheaper-alternative")}
+                    className="bg-[#C9B57A] text-white font-medium"
+                    style={{ fontFamily: 'readex-pro-vf, sans-serif', fontSize: 10, borderRadius: 8, padding: '4px 12px' }}
+                  >
+                    شوفي البديل
+                  </button>
+                ) : isSecurity ? (
+                  <button
+                    onClick={() => onNavigate("security")}
+                    className="bg-[#2F3E34] text-white font-medium"
+                    style={{ fontFamily: 'readex-pro-vf, sans-serif', fontSize: 10, borderRadius: 8, padding: '4px 12px' }}
+                  >
+                    عرض التفاصيل
+                  </button>
+                ) : null}
               </div>
-            </div>
-            <button
-              onClick={() => onNavigate("security")}
-              className="bg-[#2F3E34] text-white font-medium"
-              style={{ fontFamily: 'readex-pro-vf, sans-serif', fontSize: 10, borderRadius: 8, padding: '4px 12px' }}
-            >
-              عرض التفاصيل
-            </button>
-          </div>
+            );
+          })}
         </div>
       )}
 

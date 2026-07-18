@@ -13,6 +13,29 @@ from schemas import PredictionRequest, PredictionResponse
 router = APIRouter()
 
 
+def _build_prediction_input(current_user, income: float) -> dict:
+    """Create a lightweight input payload for the expense model using the available user data."""
+    return {
+        "Age": 30,
+        "Monthly_Income": float(income or 0),
+        "Monthly_Salary": float(income or 0),
+        "Household_Size": 4,
+        "CPI": 1.02,
+        "Gender": "Unknown",
+        "Region": "Riyadh",
+        "Nationality": "Saudi",
+        "Marital_Status": "Single",
+        "Education": "Bachelor",
+        "Employment_Status": "Employed",
+        "Occupation": "Unknown",
+        "Housing_Type": "Apartment",
+        "Housing_Ownership": "Owned",
+        "Investment_Profile": "Moderate",
+        "Risk_Level": "Medium",
+        "Goal_Type": "Emergency Fund",
+    }
+
+
 def _month_bounds(now: datetime):
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     last_day = monthrange(now.year, now.month)[1]
@@ -62,6 +85,12 @@ def dashboard(
     else:
         risk, recommendation = "Unknown", "Add your monthly income to get personalized insights."
 
+    prediction_value = None
+    try:
+        prediction_value = predict_expenses(_build_prediction_input(current_user, income))
+    except Exception:
+        prediction_value = None
+
     return {
         "user": current_user.full_name,
         "balance": round(income - spent_this_month, 2),
@@ -73,6 +102,7 @@ def dashboard(
         "days_remaining_in_month": days_remaining,
         "risk": risk,
         "recommendation": recommendation,
+        "predicted_monthly_expenses": round(prediction_value, 2) if prediction_value is not None else None,
     }
 
 

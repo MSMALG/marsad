@@ -39,6 +39,7 @@ export default function AIChat({ onBack }: Props) {
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:8001").replace(/\/$/, "");
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -66,7 +67,7 @@ export default function AIChat({ onBack }: Props) {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/assistant/chat", {
+      const response = await fetch(`${apiBaseUrl}/assistant/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,6 +80,11 @@ export default function AIChat({ onBack }: Props) {
         signal: controller.signal,
       });
 
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "تعذر الاتصال بمرصاد، تأكدي إن السيرفر شغّال");
+      }
+
       if (!response.body) throw new Error("لا يوجد رد من الخادم");
 
       const reader = response.body.getReader();
@@ -89,22 +95,28 @@ export default function AIChat({ onBack }: Props) {
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        buffer += decoder.decode(value, { stream: true });
 
-        const lines = buffer.split("\n\n");
-        buffer = lines.pop() ?? "";
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
 
-        for (const line of lines) {
+        const parts = buffer.split("\n");
+        buffer = parts.pop() ?? "";
+
+        for (const part of parts) {
+          const line = part.trim();
           if (!line.startsWith("data:")) continue;
+
           const raw = line.slice(5).trim();
-          if (raw === "[DONE]") continue;
+          if (!raw || raw === "[DONE]") continue;
+
           try {
             const parsed = JSON.parse(raw);
             if (parsed.error) {
               setError(parsed.error);
               continue;
             }
-            if (parsed.text) {
+            if (typeof parsed.text === "string" && parsed.text) {
+              setError(null);
               accumulated += parsed.text;
               setMessages((prev) => {
                 const copy = [...prev];
@@ -113,11 +125,13 @@ export default function AIChat({ onBack }: Props) {
               });
             }
           } catch {
-            // ignore malformed chunk
+            if (raw.startsWith("{") && raw.endsWith("}")) {
+              setError("تعذر فهم الرد من مرصاد، جرّبي مرة أخرى.");
+            }
           }
         }
       }
-      // If the connection closed but nothing came through, don't fail silently.
+
       if (!accumulated.trim()) {
         setError("توقف الرد قبل ما يبدأ، جربي ترسلين السؤال مرة ثانية.");
       }

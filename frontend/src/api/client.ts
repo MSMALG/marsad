@@ -4,19 +4,21 @@ export const api = axios.create({
   baseURL: "http://127.0.0.1:8000",
 });**/
 
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
+
+const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:8001").replace(/\/$/, "");
 
 export const api = axios.create({
-  baseURL: "http://127.0.0.1:8000",
+  baseURL: apiBaseUrl,
 });
 
 // Attach the JWT (saved at login) to every outgoing request.
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
-    const headers = config.headers ? { ...config.headers } : {};
-    headers.Authorization = `Bearer ${token}`;
-    headers.authorization = `Bearer ${token}`;
+    const headers = config.headers ? new AxiosHeaders(config.headers) : new AxiosHeaders();
+    headers.set("Authorization", `Bearer ${token}`);
+    headers.set("authorization", `Bearer ${token}`);
     config.headers = headers;
   }
   return config;
