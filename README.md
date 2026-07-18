@@ -1,5 +1,8 @@
 # مرصاد (Marsad) — AI-Powered Personal Finance Dashboard
 
+**Live app:** [marsad-frontend.onrender.com](https://marsad-frontend.onrender.com/)
+> Hosted on Render's free tier — it may take 30–60 seconds to wake up on first load if it's been inactive.
+
 Marsad is a full-stack personal finance app built for the Saudi market. It combines expense tracking, AI-generated savings wallets, spending-behavior analysis, fraud/security logging, an AI financial-advisor chat, and a travel/currency planner into one Arabic RTL mobile banking dashboard.
 
 - **Frontend:** React + TypeScript + Vite, Tailwind CSS, MUI, Radix UI, React Router, TanStack Query
