@@ -98,7 +98,32 @@ npm run dev
 
 By default the frontend points to `http://127.0.0.1:8001`. To override this, set `VITE_API_BASE_URL` in a `.env` file inside `frontend/`.
 
-## Testing
+## Data & Model
+
+The expense-prediction model used by `Budget.py`/`model.py` (`ml/mersad_model.pkl`, a CatBoost regression pipeline) was trained on a dataset with the following characteristics:
+
+- **Size:** 120,000 records (each representing an individual/household), 31 columns
+- **Sources:** General Authority for Statistics (GASTAT) — population, wages, labor force data, and CPI; the Saudi National Open Data Platform; and the Household Income and Consumption Expenditure Survey 2023
+- Every statistical distribution used (Saudi vs. non-Saudi ratio, average income by region, age distribution, etc.) is grounded in these sources rather than invented.
+
+**Feature groups:**
+| Category | Columns |
+|---|---|
+| Demographics | Age, Gender, Region, Nationality, Marital Status, Education, Household Size |
+| Employment & Income | Employment Status, Occupation, Monthly Income, Monthly Salary |
+| Housing | Housing Type, Housing Ownership |
+| Expenses (Target 1) | Food, Housing, Transportation, Entertainment, Healthcare expenses → sum to Monthly Expenses |
+| Savings (Target 2) | Savings, Savings Rate, Emergency Fund, Investment Rate, Investment Profile, Risk Level |
+| Economic/behavioral | CPI, Financial Stress index, Goal Type, Goal Amount, Goal Time |
+
+**Methodological notes:**
+- `Monthly_Expenses` was deliberately excluded from the Savings model's features to prevent target leakage.
+- `Nationality` is the most influential feature in predicting expenses (~63% of the model's decisions), reflecting real structural differences in wages and spending.
+- A January 2026 CPI data issue (~290 rows lost to a formatting error) was documented transparently rather than hidden.
+
+Note: this dataset trains the **expense-prediction model** (`Budget.py`). The **Smart Wallet generation** feature (`wallets.py`, `/wallets/generate`) is a separate system — it calls the Anthropic API (Claude) with web search at request time rather than using this trained model.
+
+
 
 For quick testing/demo purposes, a test account is already seeded in the database:
 
